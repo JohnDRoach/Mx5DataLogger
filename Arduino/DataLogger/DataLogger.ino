@@ -1,13 +1,32 @@
-#include <SoftwareSerial.h>
+// Notes
+//Use switch on front panel for two modes.
+//
+//- Display  (RPM, Speed, Gear, Accelerations)
+//- Settings (Launch RPM, Shift RPM)
+//
+//6500-7000
+//3500-6500
+//
+//
+//Display Mode || Settings
+//Logging Mode (No LCD updates)
+
+#include "SendOnlySoftwareSerial.h"
 
 const int LCDPin = 13;
-SoftwareSerial lcd(LCDPin); // TX
+SendOnlySoftwareSerial lcd(LCDPin);
 
 void setup() 
 {
   lcd.begin(115200);
+  initialiseLCD();
   setupBlueToothConnection();
 } 
+
+void initialiseLCD()
+{
+  lcd.write("Testing\n");
+}
 
 void setupBlueToothConnection()
 {
@@ -19,23 +38,10 @@ void setupBlueToothConnection()
 
 void loop() 
 {
-  //  char blah = 'a';
-  //  lcd.write(blah++);
-  //  delay(1000);
-  //Typical Bluetoth command - response simulation:
-
-  //Type 'a' from PC Bluetooth Serial Terminal
-  //See Bluetooth Bee - Wiki for instructions
-  //  digitalWrite(13, LOW);
-  while (Serial.available() > 0) {
+  
+  if (Serial.available() > 0) {
     lcd.write(Serial.read());
   }
-
-  //  if(Serial.read() == 'a')
-  //  {
-  //    Serial.print("You are connected");
-  //    //You can write you BT communication logic here
-  //  }
 }
 
 
