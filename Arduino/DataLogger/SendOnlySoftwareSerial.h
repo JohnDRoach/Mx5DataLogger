@@ -1,6 +1,6 @@
 /*
-SendOnlySoftwareSerial.h (formerly NewSoftSerial.h) - 
-Multi-instance software serial library for Arduino/Wiring
+SendOnlySoftwareSerial.h (modified SoftwareSerial.h) - 
+Multi-instance software serial sending library for Arduino/Wiring
 -- Interrupt-driven receive and other improvements by ladyada
    (http://ladyada.net)
 -- Tuning, circular buffer, derivation from class Print/Stream,
@@ -26,7 +26,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 The latest version of this library can always be found at
-http://arduiniana.org.
+INSERT MY GITHUB HERE
 */
 
 #ifndef SendOnlySoftwareSerial_h
@@ -47,34 +47,21 @@ http://arduiniana.org.
 class SendOnlySoftwareSerial : public Stream
 {
 private:
-  // per object data
-  //uint8_t _receivePin;
-  //uint8_t _receiveBitMask;
-  //volatile uint8_t *_receivePortRegister;
   uint8_t _transmitBitMask;
   volatile uint8_t *_transmitPortRegister;
 
-  //uint16_t _rx_delay_centering;
-  //uint16_t _rx_delay_intrabit;
-  //uint16_t _rx_delay_stopbit;
   uint16_t _tx_delay;
 
   uint16_t _buffer_overflow:1;
   uint16_t _inverse_logic:1;
 
   // static data
-  //static char _receive_buffer[_SS_MAX_RX_BUFF]; 
-  //static volatile uint8_t _receive_buffer_tail;
-  //static volatile uint8_t _receive_buffer_head;
   static SendOnlySoftwareSerial *active_object;
 
   // private methods
-  //void recv();
-  //uint8_t rx_pin_read();
   void tx_pin_write(uint8_t pin_state);
   void setTX(uint8_t transmitPin);
-  //void setRX(uint8_t receivePin);
-
+  
   // private static method for timing
   static inline void tunedDelay(uint16_t delay);
 
@@ -83,9 +70,7 @@ public:
   SendOnlySoftwareSerial(uint8_t transmitPin, bool inverse_logic = false);
   ~SendOnlySoftwareSerial();
   void begin(long speed);
-  //bool listen();
   void end();
-  //bool isListening() { return this == active_object; }
   bool overflow() { bool ret = _buffer_overflow; _buffer_overflow = false; return ret; }
   int peek();
 
@@ -95,9 +80,6 @@ public:
   virtual void flush();
   
   using Print::write;
-
-  // public only for easy access by interrupt handlers
-  //static inline void handle_interrupt();
 };
 
 // Arduino 0012 workaround

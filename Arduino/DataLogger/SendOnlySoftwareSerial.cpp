@@ -1,6 +1,6 @@
 /*
-SendOnlySoftwareSerial.cpp (formerly NewSoftSerial.cpp) - 
-Multi-instance software serial library for Arduino/Wiring
+SendOnlySoftwareSerial.cpp (modified SoftwareSerial.cpp) - 
+Multi-instance software serial sending library for Arduino/Wiring
 -- Interrupt-driven receive and other improvements by ladyada
    (http://ladyada.net)
 -- Tuning, circular buffer, derivation from class Print/Stream,
@@ -26,15 +26,9 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 The latest version of this library can always be found at
-http://arduiniana.org.
+INSERT MY GITHUB HERE
 */
 
-// When set, _DEBUG co-opts pins 11 and 13 for debugging with an
-// oscilloscope or logic analyzer.  Beware: it also slightly modifies
-// the bit times, so don't rely on it too much at high baud rates
-#define _DEBUG 0
-#define _DEBUG_PIN1 11
-#define _DEBUG_PIN2 13
 // 
 // Includes
 // 
@@ -130,28 +124,6 @@ const int XMIT_START_ADJUSTMENT = 6;
 // Statics
 //
 SendOnlySoftwareSerial *SendOnlySoftwareSerial::active_object = 0;
-//char SendOnlySoftwareSerial::_receive_buffer[_SS_MAX_RX_BUFF]; 
-//volatile uint8_t SendOnlySoftwareSerial::_receive_buffer_tail = 0;
-//volatile uint8_t SendOnlySoftwareSerial::_receive_buffer_head = 0;
-
-//
-// Debugging
-//
-// This function generates a brief pulse
-// for debugging or measuring on an oscilloscope.
-//inline void DebugPulse(uint8_t pin, uint8_t count)
-//{
-//#if _DEBUG
-//  volatile uint8_t *pport = portOutputRegister(digitalPinToPort(pin));
-//
-//  uint8_t val = *pport;
-//  while (count--)
-//  {
-//    *pport = val | digitalPinToBitMask(pin);
-//    *pport = val;
-//  }
-//#endif
-//}
 
 //
 // Private methods
@@ -171,107 +143,6 @@ inline void SendOnlySoftwareSerial::tunedDelay(uint16_t delay) {
     );
 }
 
-// This function sets the current object as the "listening"
-// one and returns true if it replaces another 
-//bool SendOnlySoftwareSerial::listen()
-//{
-//  if (active_object != this)
-//  {
-//    _buffer_overflow = false;
-//    uint8_t oldSREG = SREG;
-//    cli();
-//    _receive_buffer_head = _receive_buffer_tail = 0;
-//    active_object = this;
-//    SREG = oldSREG;
-//    return true;
-//  }
-//
-//  return false;
-//}
-
-//
-// The receive routine called by the interrupt handler
-//
-//void SendOnlySoftwareSerial::recv()
-//{
-//
-//#if GCC_VERSION < 40302
-// Work-around for avr-gcc 4.3.0 OSX version bug
-// Preserve the registers that the compiler misses
-// (courtesy of Arduino forum user *etracer*)
-//  asm volatile(
-//    "push r18 \n\t"
-//    "push r19 \n\t"
-//    "push r20 \n\t"
-//    "push r21 \n\t"
-//    "push r22 \n\t"
-//    "push r23 \n\t"
-//    "push r26 \n\t"
-//    "push r27 \n\t"
-//    ::);
-//#endif  
-//
-//  uint8_t d = 0;
-//
-  // If RX line is high, then we don't see any start bit
-  // so interrupt is probably not for us
-//  if (_inverse_logic ? rx_pin_read() : !rx_pin_read())
-//  {
-    // Wait approximately 1/2 of a bit width to "center" the sample
-//    tunedDelay(_rx_delay_centering);
-//    DebugPulse(_DEBUG_PIN2, 1);
-//
-    // Read each of the 8 bits
-//    for (uint8_t i=0x1; i; i <<= 1)
-//    {
-//      tunedDelay(_rx_delay_intrabit);
-//      DebugPulse(_DEBUG_PIN2, 1);
-//      uint8_t noti = ~i;
-//      if (rx_pin_read())
-//        d |= i;
-//      else // else clause added to ensure function timing is ~balanced
-//        d &= noti;
-//    }
-//
-    // skip the stop bit
-//    tunedDelay(_rx_delay_stopbit);
-//    DebugPulse(_DEBUG_PIN2, 1);
-//
-//    if (_inverse_logic)
-//      d = ~d;
-//
-    // if buffer full, set the overflow flag and return
-//    if ((_receive_buffer_tail + 1) % _SS_MAX_RX_BUFF != _receive_buffer_head) 
-//    {
-      // save new data in buffer: tail points to where byte goes
-//      _receive_buffer[_receive_buffer_tail] = d; // save new byte
-//      _receive_buffer_tail = (_receive_buffer_tail + 1) % _SS_MAX_RX_BUFF;
-//    } 
-//    else 
-//    {
-//#if _DEBUG // for scope: pulse pin as overflow indictator
-//      DebugPulse(_DEBUG_PIN1, 1);
-//#endif
-//      _buffer_overflow = true;
-//    }
-//  }
-
-//#if GCC_VERSION < 40302
-// Work-around for avr-gcc 4.3.0 OSX version bug
-// Restore the registers that the compiler misses
-//  asm volatile(
-//    "pop r27 \n\t"
-//    "pop r26 \n\t"
-//    "pop r23 \n\t"
-//    "pop r22 \n\t"
-//    "pop r21 \n\t"
-//    "pop r20 \n\t"
-//    "pop r19 \n\t"
-//    "pop r18 \n\t"
-//    ::);
-//#endif
-//}
-
 void SendOnlySoftwareSerial::tx_pin_write(uint8_t pin_state)
 {
   if (pin_state == LOW)
@@ -280,59 +151,10 @@ void SendOnlySoftwareSerial::tx_pin_write(uint8_t pin_state)
     *_transmitPortRegister |= _transmitBitMask;
 }
 
-//uint8_t SendOnlySoftwareSerial::rx_pin_read()
-//{
-//  return *_receivePortRegister & _receiveBitMask;
-//}
-
-//
-// Interrupt handling
-//
-
-/* static */
-//inline void SendOnlySoftwareSerial::handle_interrupt()
-//{
-//  if (active_object)
-//  {
-//    active_object->recv();
-//  }
-//}
-
-//#if defined(PCINT0_vect)
-//ISR(PCINT0_vect)
-//{
-//  SendOnlySoftwareSerial::handle_interrupt();
-//}
-//#endif
-
-//#if defined(PCINT1_vect)
-//ISR(PCINT1_vect)
-//{
-//  SendOnlySoftwareSerial::handle_interrupt();
-//}
-//#endif
-
-//#if defined(PCINT2_vect)
-//ISR(PCINT2_vect)
-//{
-//  SendOnlySoftwareSerial::handle_interrupt();
-//}
-//#endif
-
-//#if defined(PCINT3_vect)
-//ISR(PCINT3_vect)
-//{
-//  SendOnlySoftwareSerial::handle_interrupt();
-//}
-//#endif
-
 //
 // Constructor
 //
 SendOnlySoftwareSerial::SendOnlySoftwareSerial(uint8_t transmitPin, bool inverse_logic /* = false */) : 
-//  _rx_delay_centering(0),
-//  _rx_delay_intrabit(0),
-//  _rx_delay_stopbit(0),
   _tx_delay(0),
   _buffer_overflow(false),
   _inverse_logic(inverse_logic)
@@ -357,24 +179,12 @@ void SendOnlySoftwareSerial::setTX(uint8_t tx)
   _transmitPortRegister = portOutputRegister(port);
 }
 
-//void SendOnlySoftwareSerial::setRX(uint8_t rx)
-//{
-//  pinMode(rx, INPUT);
-//  if (!_inverse_logic)
-//    digitalWrite(rx, HIGH);  // pullup for normal logic!
-//  _receivePin = rx;
-//  _receiveBitMask = digitalPinToBitMask(rx);
-//  uint8_t port = digitalPinToPort(rx);
-//  _receivePortRegister = portInputRegister(port);
-//}
-
 //
 // Public methods
 //
 
 void SendOnlySoftwareSerial::begin(long speed)
 {
-  //_rx_delay_centering = _rx_delay_intrabit = _rx_delay_stopbit = 0;
   _tx_delay = 0;
 
   for (unsigned i=0; i<sizeof(table)/sizeof(table[0]); ++i)
@@ -382,62 +192,26 @@ void SendOnlySoftwareSerial::begin(long speed)
     long baud = pgm_read_dword(&table[i].baud);
     if (baud == speed)
     {
-      //_rx_delay_centering = pgm_read_word(&table[i].rx_delay_centering);
-      //_rx_delay_intrabit = pgm_read_word(&table[i].rx_delay_intrabit);
-      //_rx_delay_stopbit = pgm_read_word(&table[i].rx_delay_stopbit);
       _tx_delay = pgm_read_word(&table[i].tx_delay);
       break;
     }
   }
-
-  // Set up RX interrupts, but only if we have a valid RX baud rate
-  //if (_rx_delay_stopbit)
-  //{
-  //  if (digitalPinToPCICR(_receivePin))
-  //  {
-  //    *digitalPinToPCICR(_receivePin) |= _BV(digitalPinToPCICRbit(_receivePin));
-  //    *digitalPinToPCMSK(_receivePin) |= _BV(digitalPinToPCMSKbit(_receivePin));
-  //  }
-  //  tunedDelay(_tx_delay); // if we were low this establishes the end
-  //}
-
-//#if _DEBUG
-//  pinMode(_DEBUG_PIN1, OUTPUT);
-//  pinMode(_DEBUG_PIN2, OUTPUT);
-//#endif
-
-  //listen();
 }
 
 void SendOnlySoftwareSerial::end()
 {
-  //if (digitalPinToPCMSK(_receivePin))
-  //  *digitalPinToPCMSK(_receivePin) &= ~_BV(digitalPinToPCMSKbit(_receivePin));
 }
 
 
 // Read data from buffer
 int SendOnlySoftwareSerial::read()
 {
-//  if (!isListening())
     return -1;
-//
-  // Empty buffer?
-//  if (_receive_buffer_head == _receive_buffer_tail)
-//    return -1;
-//
-  // Read from "head"
-//  uint8_t d = _receive_buffer[_receive_buffer_head]; // grab next byte
-//  _receive_buffer_head = (_receive_buffer_head + 1) % _SS_MAX_RX_BUFF;
-//  return d;
 }
 
 int SendOnlySoftwareSerial::available()
 {
-//  if (!isListening())
     return 0;
-//
-//  return (_receive_buffer_tail + _SS_MAX_RX_BUFF - _receive_buffer_head) % _SS_MAX_RX_BUFF;
 }
 
 size_t SendOnlySoftwareSerial::write(uint8_t b)
@@ -492,24 +266,10 @@ size_t SendOnlySoftwareSerial::write(uint8_t b)
 
 void SendOnlySoftwareSerial::flush()
 {
-//  if (!isListening())
     return;
-//
-//  uint8_t oldSREG = SREG;
-//  cli();
-//  _receive_buffer_head = _receive_buffer_tail = 0;
-//  SREG = oldSREG;
 }
 
 int SendOnlySoftwareSerial::peek()
 {
-//  if (!isListening())
     return -1;
-//
-  // Empty buffer?
-//  if (_receive_buffer_head == _receive_buffer_tail)
-//   return -1;
-//
-  // Read from "head"
-//  return _receive_buffer[_receive_buffer_head];
 }
