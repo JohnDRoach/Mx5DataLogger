@@ -11,11 +11,11 @@
 //Display Mode || Settings
 //Logging Mode (No LCD updates)
 
-#include "SendOnlySoftwareSerial.h"
 #include "Lcd.h"
 
 const int LCDPin = 13;
-SendOnlySoftwareSerial lcd(LCDPin);
+const long LCDBaud = 115200;
+Lcd lcd(LCDPin, LCDBaud);
 
 void setup() 
 {
@@ -25,41 +25,24 @@ void setup()
 
 void initialiseLCD()
 {
-//  delay(1000); // Uncomment this out if there is no delay before now since turn on.
-  
-  lcd.begin(115200);
+  //  delay(1000); // Uncomment this out if there is no delay before now since turn on.
 
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x00);
+  lcd.ClearDisplay();
 
-  //lcd.write((uint8_t)0x7c);
-  //lcd.write((uint8_t)0x04);
+  lcd.print("Line 1");
+  lcd.NewLine();
+  lcd.print("Line 2");
+  lcd.NewLine();
+  lcd.print("Line 3");
+  lcd.NewLine();
+  lcd.print("Line 4");
+  lcd.NewLine();
 
-  lcd.write("Line 1\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.write("Line 2\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.write("Line 3\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.write("Line 4\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
+  lcd.GoBig();
 
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x08);  
-
-  lcd.write("Line 1 Big\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.write("Line 2 Big\n");
+  lcd.print("Line 1 Big");
+  lcd.NewLine();
+  lcd.print("Line 2 Big");
   delay(2000);
 }
 
@@ -79,48 +62,41 @@ void loop()
   //    lcd.write(Serial.read());
   //  }
 
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x00);
+  lcd.ClearDisplay();
+  lcd.GoBig();
 
   lcd.print(counter);
-  lcd.write("\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.print(counter);
-  lcd.write("\n");
-  
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x08);
-  
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.print(counter);
-  lcd.write("\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.print(counter);
-  lcd.write("\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);  
+  lcd.NewLine();
+
+  lcd.print(counter, 10);
+  //  lcd.print(counter);
+  lcd.NewLine();
+
+  lcd.GoSmall();
 
   lcd.print(counter);
-  lcd.write("\n");
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x18);
-  lcd.write((uint8_t)0x00);
-  lcd.print(counter);
-  lcd.write("\n");
+  lcd.NewLine();
 
-  lcd.write((uint8_t)0x7c);
-  lcd.write((uint8_t)0x08);
+  lcd.print(counter, 11);
+  //  lcd.print(counter);
+  lcd.NewLine();
+
+  lcd.print(counter);
+  lcd.NewLine();
+
+  lcd.print(counter, 20);
+  //  lcd.print(counter);
+  lcd.NewLine();
 
   counter++;
   delay(50);
 }
+
+
+
+
+
+
 
 
 

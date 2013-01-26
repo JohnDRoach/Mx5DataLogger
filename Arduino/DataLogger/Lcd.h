@@ -3,13 +3,16 @@
 
 //#include <inttypes.h>
 //#include <Stream.h>
+#include "Arduino.h"
 #include "SendOnlySoftwareSerial.h"
 
 class Lcd
 {
 private:
-  boolean isbig;
+  boolean isBig;
   SendOnlySoftwareSerial serialIO;
+  
+  void ChangeFont();
 
 public:
   Lcd(uint8_t transmitPin, long baudRate);
