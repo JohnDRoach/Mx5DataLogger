@@ -22,31 +22,39 @@ public:
 
   void Init()
   {
-    lcd->GoSmall();
-    lcd->printLine("To clear scores:");
-    lcd->printLine("- Alt button -->");
-    lcd->printLine("- Press change screen");
-    lcd->NewLine();
-    lcd->printLine("To cancel:");
-    lcd->printLine("- Alt button <--");
-    lcd->printLine("- Press change screen");
+    lcd->GoBig();
+    lcd->printLine("   Clear");
+    lcd->printLine("  Scores?");
+
+    if(Buttons::AlternateMode())
+    {
+      lcd->printLine("    No");    
+    }
+    else
+    {
+      lcd->printLine("    Yes");    
+    }
   }
 
   void RefreshValues()
   {
+    lcd->ClearDisplay();
+    Init();
   }
 
   Screen* NextScreen()
   {
     if(Buttons::AlternateMode())
     {
-      return successScreen;
+      return nextScreen;
     }
-
-    return nextScreen;
+    
+    return successScreen;
   }
 };
 
 #endif
+
+
 
 

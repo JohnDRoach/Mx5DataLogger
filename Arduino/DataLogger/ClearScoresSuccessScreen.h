@@ -16,8 +16,8 @@ public:
   {
     lcd->GoBig();
     lcd->NewLine();
-    lcd->printLine(" Scores");
-    lcd->printLine("Cleared!");
+    lcd->printLine("   Scores");
+    lcd->printLine("  Cleared!");
   }
 
   void RefreshValues()

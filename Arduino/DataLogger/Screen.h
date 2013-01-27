@@ -2,7 +2,6 @@
 #define Screen_h
 
 #include "Lcd.h"
-#include "Buttons.h"
 
 class Screen
 {
@@ -27,14 +26,12 @@ public:
 
   void SetNextScreen(Screen* screen)
   {
-    if(!Buttons::AlternateMode())
-    {
-      nextScreen = screen;
-    }
+    nextScreen = screen;
   }
 };
 
 #endif
+
 
 
 
