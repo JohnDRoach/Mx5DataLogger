@@ -12,9 +12,9 @@ public:
 
   static void Update()
   {
-    TestValues::testCounter++;
-    TestValues::alternateButtonState = Buttons::AlternateMode();
-    TestValues::screenChangeState = Buttons::ScreenChange();
+    testCounter++;
+    alternateButtonState = Buttons::AlternateMode();
+    screenChangeState = Buttons::ScreenChange();
   }
 };
 

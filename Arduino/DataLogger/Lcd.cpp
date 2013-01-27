@@ -5,6 +5,15 @@ const uint8_t Clear = 0x00;
 const uint8_t ChangeXCoord = 0x18;
 const uint8_t ToggleFont = 0x08;
 
+Lcd* Lcd::instance = 0;
+
+Lcd* Lcd::Instance()
+{
+  if(instance == 0)
+    instance = new Lcd(7, 115200);
+  return instance;
+}
+
 Lcd::Lcd(uint8_t transmitPin, long baudRate) :
 isBig(false),
 serialIO(transmitPin)
@@ -121,4 +130,5 @@ void Lcd::print(boolean value)
 {
   serialIO.print((int)value);
 }
+
 

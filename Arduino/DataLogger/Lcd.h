@@ -9,12 +9,14 @@
 class Lcd
 {
 private:
+static Lcd* instance;
   boolean isBig;
   SendOnlySoftwareSerial serialIO;
   
   void ChangeFont();
 
 public:
+static Lcd* Instance();
   Lcd(uint8_t transmitPin, long baudRate);
   ~Lcd();
 

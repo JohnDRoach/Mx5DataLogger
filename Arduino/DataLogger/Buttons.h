@@ -9,14 +9,14 @@ const int screenChangePin = 5;
 class Buttons
 {
 private:
-  const long debounceTime = 50;
+  static const long debounceTime = 50;
   
-  long startedDebouncingAt = 0;
-  int lastButtonState = LOW;
-  int buttonState = LOW;
+  static long startedDebouncingAt;
+  static int lastButtonState;
+  static int buttonState;
 
 public:
-  boolean ScreenChange()
+  static boolean ScreenChange()
   {
     int pinState = digitalRead(screenChangePin);
     long currentTime = millis();
@@ -34,11 +34,14 @@ public:
     return buttonState == HIGH;
   }
 
-  boolean AlternateMode()
+  static boolean AlternateMode()
   {
     return digitalRead(alternateModePin);
   }
 };
+  long Buttons::startedDebouncingAt = 0;
+  int Buttons::lastButtonState = LOW;
+  int Buttons::buttonState = LOW;
 
 #endif
 
