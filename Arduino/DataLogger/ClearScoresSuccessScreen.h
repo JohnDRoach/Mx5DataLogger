@@ -3,22 +3,28 @@
 
 #include "Screen.h"
 
-class ClearScoresSuccessScreen : public Screen
+class ClearScoresSuccessScreen : 
+public Screen
 {
 public:
-  ClearScoresSuccessScreen(Lcd* lcd) : base(lcd)
+  ClearScoresSuccessScreen(Lcd* lcd) : 
+  Screen(lcd)
   {
   }
 
   void Init()
   {
-    lcd->printLine("Scores Cleared!");
+    lcd->GoBig();
+    lcd->NewLine();
+    lcd->printLine(" Scores");
+    lcd->printLine("Cleared!");
   }
-  
+
   void RefreshValues()
   {
   }
 };
 
 #endif
+
 

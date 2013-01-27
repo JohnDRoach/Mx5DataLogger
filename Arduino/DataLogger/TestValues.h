@@ -18,9 +18,5 @@ public:
   }
 };
 
-int TestValues::testCounter = 0;
-boolean TestValues::alternateButtonState = false;
-boolean TestValues::screenChangeState = false;
-
 #endif
 

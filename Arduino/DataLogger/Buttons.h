@@ -10,7 +10,7 @@ class Buttons
 {
 private:
   static const long debounceTime = 50;
-  
+
   static long startedDebouncingAt;
   static int lastButtonState;
   static int buttonState;
@@ -39,11 +39,9 @@ public:
     return digitalRead(alternateModePin);
   }
 };
-  long Buttons::startedDebouncingAt = 0;
-  int Buttons::lastButtonState = LOW;
-  int Buttons::buttonState = LOW;
 
 #endif
+
 
 
 

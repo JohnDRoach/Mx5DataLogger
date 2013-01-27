@@ -3,23 +3,27 @@
 
 #include "Screen.h"
 
-class DiagScreen : public Screen
+class DiagScreen : 
+public Screen
 {
 public:
-  DiagScreen(Lcd* lcd) : base(lcd)
+  DiagScreen(Lcd* lcd) : 
+  Screen(lcd)
   {
   }
 
   void Init()
   {
-    lcd->printLine("Diag Screen");
+    lcd->GoSmall();
+    lcd->printLine("  Diag Screen");
   }
-  
+
   void RefreshValues()
   {
-    lcd->printLine("Update..");
+    lcd->printLine("D");
   }
 };
 
 #endif
+
 

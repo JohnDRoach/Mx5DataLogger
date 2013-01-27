@@ -1,12 +1,28 @@
 #include "ScreenHandler.h"
-//#include "MainScreen.h"
-//#include "HighScoreScreen.h"
-//#include "DiagScreen.h"
+#include "MainScreen.h"
+#include "DiagScreen.h"
+#include "HighScoreScreen.h"
+
 
 ScreenHandler::ScreenHandler() :
 screenChangeLastState(false),
 lcd(Lcd::Instance())
 {
+  Screen* screen1 = new MainScreen(lcd);
+  Screen* screen2 = new HighScoreScreen(lcd);
+  Screen* screen3 = new DiagScreen(lcd);
+
+  screen1->SetNextScreen(screen2);
+  screen2->SetNextScreen(screen3);
+  screen3->SetNextScreen(screen1);
+
+  currentScreen = screen1;
+}
+
+void ScreenHandler::Start()
+{
+  lcd->ClearDisplay();
+  currentScreen->Init();
 }
 
 void ScreenHandler::ChangeScreen(boolean state)
@@ -15,15 +31,14 @@ void ScreenHandler::ChangeScreen(boolean state)
   {
     ChangeScreen();
   }
-  
+
   screenChangeLastState = state;
 }
 
 void ScreenHandler::ChangeScreen()
 {
   currentScreen = currentScreen->NextScreen();
-  lcd->ClearDisplay();
-  currentScreen->Init();
+  Start();
 }
 
 void ScreenHandler::RefreshValues()

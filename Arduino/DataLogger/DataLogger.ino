@@ -14,10 +14,11 @@
 #include <TimerOne.h>
 #include "Lcd.h"
 #include "Buttons.h"
-#include "TestValues.h"
 #include "ScreenHandler.h"
+#include "TestValues.h"
 
-const float VERSION = 0.3;
+
+const float VERSION = 0.4;
 
 // Pin Definitions
 const int speedSensorPin = 2;
@@ -47,7 +48,7 @@ void setup()
   lcd->NewLine();
   lcd->NewLine();
   countDown();
-  startLcdTimer();
+  startLcd();
 } 
 
 void initialiseLCD()
@@ -107,8 +108,9 @@ void countDown()
   }
 }
 
-void startLcdTimer()
+void startLcd()
 {
+  screenHandler.Start();
   Timer1.initialize(100000);  // 0.1 second period in microseconds
   Timer1.attachInterrupt(WriteToLCD);
 }

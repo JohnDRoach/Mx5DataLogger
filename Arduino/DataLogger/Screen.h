@@ -2,14 +2,13 @@
 #define Screen_h
 
 #include "Lcd.h"
+#include "Buttons.h"
 
 class Screen
 {
-private:
-  Screen* nextScreen;
-
 protected:
   Lcd* lcd;
+  Screen* nextScreen;
 
 public:
   Screen(Lcd* lcd) :
@@ -25,12 +24,17 @@ public:
   {
     return nextScreen;
   }
-  
+
   void SetNextScreen(Screen* screen)
   {
-    nextScreen = screen;
+    if(!Buttons::AlternateMode())
+    {
+      nextScreen = screen;
+    }
   }
 };
 
 #endif
+
+
 

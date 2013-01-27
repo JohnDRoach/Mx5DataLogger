@@ -10,11 +10,13 @@ private:
   boolean screenChangeLastState;
   Screen* currentScreen;
   Lcd* lcd;
-  
+
   void ChangeScreen();
-  
+
 public:
   ScreenHandler();
+
+  void Start();
 
   void ChangeScreen(boolean state);
 
@@ -22,4 +24,5 @@ public:
 };
 
 #endif
+
 

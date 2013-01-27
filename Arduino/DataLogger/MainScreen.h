@@ -3,23 +3,28 @@
 
 #include "Screen.h"
 
-class MainScreen : public Screen
+class MainScreen : 
+public Screen
 {
 public:
-  MainScreen(Lcd* lcd) : base(lcd)
+  MainScreen(Lcd* lcd) : 
+  Screen(lcd)
   {
   }
 
   void Init()
   {
-    lcd->printLine("Main Screen");
+    lcd->GoSmall();
+    lcd->printLine("  Main Screen");
   }
-  
+
   void RefreshValues()
   {
-    lcd->printLine("Update");
+    lcd->printLine("M");
   }
 };
 
 #endif
+
+
 
