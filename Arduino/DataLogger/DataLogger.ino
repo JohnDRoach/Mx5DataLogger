@@ -31,7 +31,7 @@ const int zGPin = A2;
 //const int intakeTempPin = A3;
 
 Lcd* lcd = Lcd::Instance();
-ScreenHandler screenHandler();
+ScreenHandler screenHandler;
 
 void setup() 
 {
@@ -113,8 +113,6 @@ void startLcdTimer()
   Timer1.attachInterrupt(WriteToLCD);
 }
 
-boolean screenChangeLastState = false;
-
 void loop()
 {
   //  if (Serial.available() > 0) {
@@ -123,47 +121,16 @@ void loop()
 
   TestValues::Update();
   delay(50);
-  
+
   // Update CarData()
   // Send Bluetooth Data()
   // Update HighScoreData()
   // Update DiagnosticsData()
-  
-  boolean screenChangeState = Buttons::Buttons::ScreenChange();
-  if(screenChangeState == true && screenChangeLastState == false)
-  {
-    //screenHandler.ChangeScreen(false);
-  }
-  screenChangeLastState = screenChangeState;
-  //screenHandler.RefreshValues();
 }
 
 void WriteToLCD()
 {
-  lcd->ClearDisplay();
-  lcd->GoBig();
-
-  lcd->print(TestValues::testCounter);
-  lcd->NewLine();
-
-  lcd->print(TestValues::testCounter, 10);
-  lcd->NewLine();
-
-  lcd->GoSmall();
-
-  lcd->print(TestValues::testCounter);
-  lcd->NewLine();
-
-  lcd->print(TestValues::testCounter, 15);
-  lcd->NewLine();
-
-  lcd->print(TestValues::screenChangeState);
-  lcd->NewLine();
-
-  lcd->print(TestValues::alternateButtonState);
-  lcd->NewLine();
+  screenHandler.ChangeScreen(Buttons::ScreenChange());
+  screenHandler.RefreshValues();
 }
-
-
-
 

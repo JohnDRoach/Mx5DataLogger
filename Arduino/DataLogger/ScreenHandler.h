@@ -1,21 +1,24 @@
 #ifndef ScreenHandler_h
 #define ScreenHandler_h
 
+#include "Lcd.h"
+#include "Screen.h"
+
 class ScreenHandler
 {
+private:
+  boolean screenChangeLastState;
+  Screen* currentScreen;
+  Lcd* lcd;
+  
+  void ChangeScreen();
+  
 public:
-ScreenHandler()
-{
-}
+  ScreenHandler();
 
-void ChangeScreen(boolean state)
-{
-}
+  void ChangeScreen(boolean state);
 
-void RefreshValues()
-{
-}
-
+  void RefreshValues();
 };
 
 #endif
