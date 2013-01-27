@@ -24,11 +24,13 @@ public:
   void GoSmall();
 
   void print(char*);
+  void printLine(char*);
   void print(int);
   void print(int, int);
   void print(float);
   void print(double);
   void print(long);
+  void print(boolean);
 };
 
 #endif

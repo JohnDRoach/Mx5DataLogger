@@ -8,53 +8,110 @@
 //3500-6500
 //
 //
-//Display Mode || Settings
+//Display Mode || High Scores || Diagnostics
 //Logging Mode (No LCD updates)
 
+#include <TimerOne.h>
 #include "Lcd.h"
+#include "Buttons.h"
+#include "TestValues.h"
 
-const int LCDPin = 13;
-const long LCDBaud = 115200;
-Lcd lcd(LCDPin, LCDBaud);
+const float VERSION = 0.3;
+
+// Pin Definitions
+const int speedSensorPin = 2;
+//const int rpmSensorPin = 3;
+//const int brakeSwitchPin = 6;
+const int lcdPin = 7;
+const int shiftLightPin = 8;
+const int videoStartPin = 9;
+const int xGPin = A0;
+const int yGPin = A1;
+const int zGPin = A2;
+//const int intakeTempPin = A3;
+
+Lcd lcd(lcdPin, 115200);
 
 void setup() 
 {
-  setupBlueToothConnection();
+  pinMode(alternateModePin, INPUT);
+  pinMode(screenChangePin, INPUT);
+  pinMode(shiftLightPin, OUTPUT);
+  pinMode(videoStartPin, OUTPUT);
+
   initialiseLCD();
+  setupBlueToothConnection();
+  loadHighScores();
+  startLoggingTimer();
+  lcd.NewLine();
+  lcd.NewLine();
+  countDown();
+  startLcdTimer();
 } 
 
 void initialiseLCD()
 {
-  //  delay(1000); // Uncomment this out if there is no delay before now since turn on.
-
+  delay(2000); // Wait for LCD to become active
   lcd.ClearDisplay();
-
-  lcd.print("Line 1");
-  lcd.NewLine();
-  lcd.print("Line 2");
-  lcd.NewLine();
-  lcd.print("Line 3");
-  lcd.NewLine();
-  lcd.print("Line 4");
-  lcd.NewLine();
-
-  lcd.GoBig();
-
-  lcd.print("Line 1 Big");
-  lcd.NewLine();
-  lcd.print("Line 2 Big");
+  lcd.GoSmall();
+  lcd.print("-- DataLogger ");
+  lcd.print(VERSION);
+  lcd.print(" --");
   delay(2000);
 }
 
 void setupBlueToothConnection()
 {
   Serial.begin(115200);
+  lcd.print("Bluetooth Init....");
   delay(2000);  // Wait for device to be fully awake
   Serial.print("\r\n+INQ=1\r\n");  // Tell BlueToothBee to advertise itself
   delay(2000); // This delay is required.
+  lcd.printLine("OK");
 }
 
-int counter = 0;
+void loadHighScores()
+{
+  lcd.print("Load High Scores..");
+  delay(1500);
+  lcd.printLine("OK");
+}
+
+void startLoggingTimer()
+{
+  lcd.print("Logger Timer......");
+  delay(1500);
+  lcd.printLine("OK");
+}
+
+void countDown()
+{
+  int count = 5;
+
+  while(!Buttons::AlternateMode() && count > 0)
+  {
+    lcd.print(count);
+    count--;
+    delay(1000);
+  }
+
+  while(Buttons::AlternateMode())
+  {
+    if(count >= 0)
+    {
+      count = -1;
+      lcd.NewLine();
+      lcd.print("Unlock to continue.");
+    }
+  }
+}
+
+void startLcdTimer()
+{
+  Timer1.initialize(100000);  // 0.1 second period in microseconds
+  Timer1.attachInterrupt(WriteToLCD);
+  Timer1.start();
+}
 
 void loop() 
 {
@@ -62,45 +119,35 @@ void loop()
   //    lcd.write(Serial.read());
   //  }
 
+  TestValues::Update();
+  delay(50);
+}
+
+void WriteToLCD()
+{
   lcd.ClearDisplay();
   lcd.GoBig();
 
-  lcd.print(counter);
+  lcd.print(TestValues::testCounter);
   lcd.NewLine();
 
-  lcd.print(counter, 10);
-  //  lcd.print(counter);
+  lcd.print(TestValues::testCounter, 10);
   lcd.NewLine();
 
   lcd.GoSmall();
 
-  lcd.print(counter);
+  lcd.print(TestValues::testCounter);
   lcd.NewLine();
 
-  lcd.print(counter, 11);
-  //  lcd.print(counter);
+  lcd.print(TestValues::testCounter, 15);
   lcd.NewLine();
 
-  lcd.print(counter);
+  lcd.print(TestValues::screenChangeState);
   lcd.NewLine();
 
-  lcd.print(counter, 20);
-  //  lcd.print(counter);
+  lcd.print(TestValues::alternateButtonState);
   lcd.NewLine();
-
-  counter++;
-  delay(50);
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

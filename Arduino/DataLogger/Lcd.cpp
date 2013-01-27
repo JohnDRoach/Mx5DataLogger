@@ -58,6 +58,12 @@ void Lcd::print(char* value)
   serialIO.write(value);
 }
 
+void Lcd::printLine(char* value)
+{
+  print(value);
+  NewLine();
+}
+
 void Lcd::print(int value)
 {
   serialIO.print(value);
@@ -111,10 +117,8 @@ void Lcd::print(long value)
   serialIO.print(value);
 }
 
-
-
-
-
-
-
+void Lcd::print(boolean value)
+{
+  serialIO.print((int)value);
+}
 
