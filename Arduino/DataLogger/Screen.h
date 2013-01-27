@@ -6,8 +6,10 @@
 class Screen
 {
 private:
-  Lcd* lcd;
   Screen* nextScreen;
+
+protected:
+  Lcd* lcd;
 
 public:
   Screen(Lcd* lcd) :
@@ -19,14 +21,14 @@ public:
   virtual void Init();
   virtual void RefreshValues();
 
-  void SetNextScreen(Screen* screen)
-  {
-    nextScreen = screen;
-  }
-
   virtual Screen* NextScreen()
   {
     return nextScreen;
+  }
+  
+  void SetNextScreen(Screen* screen)
+  {
+    nextScreen = screen;
   }
 };
 
