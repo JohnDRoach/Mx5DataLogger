@@ -107,14 +107,35 @@ int Lcd::CalculateLength(int value)
     length++;
     tempValue /= 10;
   }
-  
+
   return length;
+}
+
+int Lcd::CalculateLength(float value)
+{
+  if(value < 0)
+  { 
+    value *= -1;
+    return CalculateLength((int)value) + 1;
+  }
+
+  return CalculateLength((int)value);
 }
 
 uint8_t Lcd::GetCharacterPositionDifference(int value, int totalChars)
 {
   int length = CalculateLength(value);
+  return PositionDifferenceFromLength(length, totalChars);
+}
 
+uint8_t Lcd::GetCharacterPositionDifference(float value, int totalChars)
+{
+  int length = CalculateLength(value);
+  return PositionDifferenceFromLength(length, totalChars);
+}
+
+uint8_t Lcd::PositionDifferenceFromLength(int length, int totalChars)
+{
   if(length < totalChars)
   {
     return totalChars - length;
@@ -141,15 +162,21 @@ void Lcd::print(int value)
 
 void Lcd::printBigInt(int value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  characterPosition += GetCharacterPositionDifference(value, totalChars);
   MoveBigCursor(line, characterPosition);
+
+  for(int i = 0; i < GetCharacterPositionDifference(value, totalChars); ++i)
+    serialIO.print(' ');
+
   serialIO.print(value);
 }
 
 void Lcd::printSmallInt(int value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  characterPosition += GetCharacterPositionDifference(value, totalChars);
   MoveSmallCursor(line, characterPosition);
+
+  for(int i = 0; i < GetCharacterPositionDifference(value, totalChars); ++i)
+    serialIO.print(' ');
+
   serialIO.print(value);
 }
 
@@ -160,17 +187,29 @@ void Lcd::print(float value)
 
 void Lcd::printBigFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  characterPosition += GetCharacterPositionDifference(value, totalChars);
   MoveBigCursor(line, characterPosition);
+
+  for(int i = 0; i < GetCharacterPositionDifference(value, totalChars); ++i)
+    serialIO.print(' ');
+
   serialIO.print(value);
 }
 
 void Lcd::printSmallFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  characterPosition += GetCharacterPositionDifference(value, totalChars);
   MoveSmallCursor(line, characterPosition);
+
+  for(int i = 0; i < GetCharacterPositionDifference(value, totalChars); ++i)
+    serialIO.print(' ');
+
   serialIO.print(value);
 }
+
+
+
+
+
+
 
 
 

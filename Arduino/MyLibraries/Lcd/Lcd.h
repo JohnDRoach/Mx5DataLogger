@@ -16,7 +16,10 @@ private:
   void ChangeFont();
   void SendCommand(uint8_t);
   int CalculateLength(int);
+  int CalculateLength(float);
   uint8_t GetCharacterPositionDifference(int value, int totalChars);
+  uint8_t GetCharacterPositionDifference(float value, int totalChars);
+  uint8_t PositionDifferenceFromLength(int length, int totalChars);
 
 public:
   static Lcd* Instance();
@@ -42,6 +45,7 @@ public:
 };
 
 #endif
+
 
 
 
