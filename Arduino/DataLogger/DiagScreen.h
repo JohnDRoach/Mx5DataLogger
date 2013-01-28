@@ -4,6 +4,7 @@
 #include "Screen.h"
 #include "CarData.h"
 #include "DiagData.h"
+#include "Settings.h"
 
 class DiagScreen : 
 public Screen
@@ -51,8 +52,8 @@ public:
     else
       lcd->print("Moving");
 
-    lcd->printSmallInt(5500, 5, 14, 4); // Launch RPM from settings
-    lcd->printSmallInt(6800, 6, 14, 4); // Shift RPM from settings
+    lcd->printSmallInt(Settings::LaunchRpm, 5, 14, 4); // Launch RPM from settings
+    lcd->printSmallInt(Settings::ShiftRpm, 6, 14, 4); // Shift RPM from settings
   }
 };
 

@@ -1,8 +1,3 @@
-#include "TestValues.h"
-int TestValues::testCounter = 0;
-boolean TestValues::alternateButtonState = false;
-boolean TestValues::screenChangeState = false;
-
 #include "Buttons.h"
 long Buttons::startedDebouncingAt = 0;
 int Buttons::lastButtonState = LOW;
@@ -23,3 +18,6 @@ boolean CarData::Stationary = true;
 int DiagData::RearSpeedCount = 0;
 int DiagData::RpmCount = 0;
 
+#include "Settings.h"
+int Settings::LaunchRpm = 5500;
+int Settings::ShiftRpm = 6800;

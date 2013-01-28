@@ -1,8 +1,10 @@
 #ifndef Lcd_h
 #define Lcd_h
 
+//#include <inttypes.h>
+//#include <Stream.h>
 #include "Arduino.h"
-#include <SendOnlySoftwareSerial.h>
+#include "SendOnlySoftwareSerial.h"
 
 class Lcd
 {
@@ -43,4 +45,9 @@ public:
 };
 
 #endif
+
+
+
+
+
 

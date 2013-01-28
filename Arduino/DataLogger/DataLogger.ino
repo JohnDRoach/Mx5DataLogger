@@ -1,12 +1,15 @@
 #include <TimerOne.h>
 #include <MsTimer2.h>
-#include "Lcd.h"
+#include <SD.h>
+#include <Lcd.h>
+#include <SendOnlySoftwareSerial.h>
 #include "Buttons.h"
 #include "ScreenHandler.h"
 #include "CarData.h"
 #include "DiagData.h"
+#include "Settings.h"
 
-const float VERSION = 0.7;
+const float VERSION = 0.8;
 
 // Pin Definitions
 const int speedSensorPin = 2;
@@ -72,19 +75,51 @@ void setupBlueToothConnection()
   if (Serial.available() > 0)
     lcd->printLine("OK");  
   else
-    lcd->printLine("E1");
+    lcd->printLine("B1");  // Didn't receive a response
 }
 
 void mountSDCard()
 {
   lcd->print("Mounting SDCard..");
-  lcd->printLine("OK");
+
+  int errorCode = SD.begin(10); // 10 is the chip select for this board
+
+  // 0 = OK
+  // S1 = Card Missing
+  // S2 = No FAT16/FAT32 Partition
+  // S3 = Already open or not initialised
+  if(errorCode)
+  {
+    lcd->print("S");
+    lcd->print(errorCode);
+    lcd->NewLine();
+  }
+  else
+  {
+    lcd->printLine("OK");      
+  }
 }
 
 void loadSettings()
 {
   lcd->print("Load Settings....");
-  lcd->printLine("OK");
+
+  int errorCode = Settings::Init();
+
+  // 0 = OK
+  // L1 = File not found
+  // L2 = File is Empty
+  // L3 = Invalid data
+  if(errorCode)
+  {
+    lcd->print("L");
+    lcd->print(errorCode);
+    lcd->NewLine();
+  }
+  else
+  {
+    lcd->printLine("OK");      
+  }
 }
 
 void loadHighScores()
@@ -164,5 +199,8 @@ void counterTimerFired()
   rpm = rpmCounter * 120; // this is per 500ms
   rpmCounter = 0;  
 }
+
+
+
 
 
