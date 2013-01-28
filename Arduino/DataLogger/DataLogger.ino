@@ -6,7 +6,7 @@
 #include "CarData.h"
 #include "DiagData.h"
 
-const float VERSION = 0.6;
+const float VERSION = 0.7;
 
 // Pin Definitions
 const int speedSensorPin = 2;
