@@ -129,7 +129,7 @@ void loop()
   //    lcd->write(Serial.read());
   //  }
 
-  stationary = (rearSpeedCounter + rearSpeed) > 0;
+  stationary = (rearSpeedCounter + rearSpeed) == 0;
   CarData::Update(rearSpeed, rpm, stationary);
   // Send Bluetooth Data()
   // Update HighScoreData()

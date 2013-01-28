@@ -46,7 +46,7 @@ public:
     lcd->printSmallFloat(CarData::XG, 7, 4, 2);
     lcd->printSmallFloat(CarData::YG, 7, 9, 2);
     lcd->printSmallFloat(CarData::ZG, 7, 16, 2);
-    lcd->printSmallInt(CarData::IntakeTemp, 9, 13, 3);
+    lcd->printSmallInt(CarData::IntakeTemp, 8, 13, 3);
   }
 };
 
