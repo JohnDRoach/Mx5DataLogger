@@ -3,8 +3,8 @@
 #include "Lcd.h"
 #include "Buttons.h"
 #include "ScreenHandler.h"
-#include "TestValues.h"
-
+#include "CarData.h"
+#include "DiagData.h"
 
 const float VERSION = 0.6;
 
@@ -24,6 +24,8 @@ volatile unsigned int rearSpeed = 0;
 volatile unsigned int rearSpeedCounter = 0;
 volatile unsigned int rpm = 0;
 volatile unsigned int rpmCounter = 0;
+
+boolean stationary = true;
 
 Lcd* lcd = Lcd::Instance();
 ScreenHandler screenHandler;
@@ -127,13 +129,11 @@ void loop()
   //    lcd->write(Serial.read());
   //  }
 
-  TestValues::Update();
-  delay(50);
-
-  // Update CarData()
+  stationary = (rearSpeedCounter + rearSpeed) > 0;
+  CarData::Update(rearSpeed, rpm, stationary);
   // Send Bluetooth Data()
   // Update HighScoreData()
-  // Update DiagnosticsData()
+  DiagData::Update(rearSpeedCounter, rpmCounter);
 }
 
 
@@ -155,13 +155,14 @@ void RpmSensorInterrupt()
 void counterTimerFired()
 {
   //Multipliers are based on period of MsTimer2
-  
+
   //rearSpeed = speedCounter * 1.629; // this is per second
   rearSpeed = rearSpeedCounter * 3.257; // this is per 500ms
   rearSpeedCounter = 0;
-  
+
   //rpm = rpmCounter * 60; // this is per second  
   rpm = rpmCounter * 120; // this is per 500ms
   rpmCounter = 0;  
 }
+
 

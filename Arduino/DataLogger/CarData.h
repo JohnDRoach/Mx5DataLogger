@@ -1,6 +1,8 @@
 #ifndef CarData_h
 #define CarData_h
 
+#include "Arduino.h"
+
 const int xGPin = A0;
 const int yGPin = A1;
 const int zGPin = A2;
@@ -8,44 +10,67 @@ const int intakeTempPin = A3;
 
 class CarData
 {
-public:
-  static int rearSpeed;
-  static int rpm;
-  static int gear;
-  static float xG;
-  static float yG;
-  static float zG;
-  static float intakeTemp;
+private:
+  static int rpmOverSpeed;
 
-  static void Update(int rear, int revs)
+  static int CalculateGear()
   {
-    rearSpeed = rear;
-    rpm = revs;
+    if(RearSpeed == 0)
+      return 0;
 
-    // Need to figure out this calculation!
-    if(rearSpeed == 0)
-      gear = 0;
+    rpmOverSpeed = Rpm / RearSpeed;
+
+    if(rpmOverSpeed > 120)
+      return 1;
+    else if(rpmOverSpeed > 70)
+      return 2;
+    else if(rpmOverSpeed > 50)
+      return 3;
+    else if(rpmOverSpeed > 35)
+      return 4;
     else
-      gear = 5 - (rpm / rearSpeed) * 3;
+      return 5;
+  }
+
+public:
+  static int RearSpeed;
+  static int Rpm;
+  static int Gear;
+  static float XG;
+  static float YG;
+  static float ZG;
+  static float IntakeTemp;
+  static boolean Stationary;
+
+  static void Update(unsigned int rearSpeed, unsigned int rpm, boolean stationary)
+  {
+    RearSpeed = rearSpeed;
+    Rpm = rpm;
+    Gear = CalculateGear();
 
     // 0V = 0
     // 3.3V = 1023
     // 0G = 3.3/2 = 1023/2 ~ 512
     float tep = 0.0;
     tep = analogRead(xGPin);
-    xG = (tep - 512)/102.3;
+    XG = (tep - 512)/102.3;
     tep = analogRead(yGPin);
-    yG = (tep - 512)/102.3;
+    YG = (tep - 512)/102.3;
     tep = analogRead(zGPin);
-    zG = (tep - 512)/102.3;
+    ZG = (tep - 512)/102.3;
 
     // Some multiplier what ever happens with the intake temp voltage
     tep = analogRead(intakeTempPin);
-    intakeTemp = tep;
+    IntakeTemp = tep;
+    
+    Stationary = stationary;
   }
 };
 
 #endif
+
+
+
 
 
 
