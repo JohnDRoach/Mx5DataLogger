@@ -43,10 +43,10 @@ public:
     lcd->printBigInt(CarData::Gear, 3, 9, 1);
 
     lcd->GoSmall();
-    lcd->printSmallFloat(CarData::XG, 7, 4, 2);
-    lcd->printSmallFloat(CarData::YG, 7, 9, 2);
-    lcd->printSmallFloat(CarData::ZG, 7, 16, 2);
-    lcd->printSmallInt(CarData::IntakeTemp, 8, 13, 3);
+    lcd->printSmallFloat(CarData::XG, 7, 3, 2);
+    lcd->printSmallFloat(CarData::YG, 7, 10, 2);
+    lcd->printSmallFloat(CarData::ZG, 7, 17, 2);
+    lcd->printSmallInt(CarData::IntakeTemp, 8, 14, 3);
   }
 };
 

@@ -39,7 +39,7 @@ public:
     lcd->GoSmall();
 
     lcd->printSmallInt(CarData::RearSpeed, 2, 8, 3);
-    lcd->printSmallInt(CarData::Rpm, 2, 17, 3);
+    lcd->printSmallInt(CarData::Rpm, 2, 17, 4);
 
     lcd->printSmallInt(DiagData::RearSpeedCount, 3, 8, 3);
     lcd->printSmallInt(DiagData::RpmCount, 3, 17, 4);
