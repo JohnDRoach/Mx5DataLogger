@@ -24,17 +24,17 @@ public:
     lcd->print("GEAR");
 
     lcd->GoSmall();
-    lcd->MoveSmallCursor(7,1);
+    lcd->MoveSmallCursor(7, 1);
     lcd->print("x");
-    lcd->MoveSmallCursor(7,8);
+    lcd->MoveSmallCursor(7, 8);
     lcd->print("y");
-    lcd->MoveSmallCursor(7,15);
+    lcd->MoveSmallCursor(7, 15);
     lcd->print("z");
 
-    lcd->MoveSmallCursor(8,1);
+    lcd->MoveSmallCursor(8, 1);
     lcd->print("Intake Temp:");
   }
-  
+
   void RefreshValues()
   {
     lcd->GoBig();
@@ -51,6 +51,7 @@ public:
 };
 
 #endif
+
 
 
 
