@@ -3,7 +3,13 @@
 const uint8_t StartCommand = 0x7C;
 const uint8_t Clear = 0x00;
 const uint8_t ChangeXCoord = 0x18;
+const uint8_t ChangeYCoord = 0x19;
 const uint8_t ToggleFont = 0x08;
+
+const uint8_t BigFontWidth = 11;
+const uint8_t BigFontHeight = 16;
+const uint8_t SmallFontWidth = 6;
+const uint8_t SmallFontHeight = 8;
 
 Lcd* Lcd::instance = 0;
 
@@ -27,15 +33,13 @@ Lcd::~Lcd()
 
 void Lcd::ClearDisplay()
 {
-  serialIO.write(StartCommand);
-  serialIO.write(Clear);
+  SendCommand(Clear);
 }
 
 void Lcd::NewLine()
 {
   serialIO.write("\n");
-  serialIO.write(StartCommand);
-  serialIO.write(ChangeXCoord);
+  SendCommand(ChangeXCoord);
   serialIO.write((uint8_t)0x00);
 }
 
@@ -55,11 +59,71 @@ void Lcd::GoSmall()
   }
 }
 
+//const uint8_t BigFontWidth = 11;
+//const uint8_t BigFontHeight = 16;
+//const uint8_t SmallFontWidth = 6;
+//const uint8_t SmallFontHeight = 8;
+
+void Lcd::MoveBigCursor(uint8_t line, uint8_t charPos)
+{
+  // Line, Y
+  SendCommand(ChangeYCoord);
+  serialIO.write((uint8_t)0x00);
+  // Character Position, X
+  SendCommand(ChangeXCoord);
+  serialIO.write((uint8_t)0x00);
+}
+
+void Lcd::MoveSmallCursor(uint8_t line, uint8_t charPos)
+{
+  // Line, Y
+  SendCommand(ChangeYCoord);
+  serialIO.write((uint8_t)0x00);
+  // Character Position, X
+  SendCommand(ChangeXCoord);
+  serialIO.write((uint8_t)0x00);
+}
+
 void Lcd::ChangeFont()
 {
-  serialIO.write(StartCommand);
-  serialIO.write(ToggleFont);
+  SendCommand(ToggleFont);
   isBig = !isBig;
+}
+
+void Lcd::SendCommand(uint8_t command)
+{
+  serialIO.write(StartCommand);
+  serialIO.write(command);
+}
+
+int Lcd::CalculateLength(int value)
+{
+  int length = 1;
+  int tempValue = value;
+
+  if(value < 0)
+  { 
+    length++;
+    tempValue *= -1;
+  }
+
+  while(tempValue > 9)
+  {
+    length++;
+    tempValue /= 10;
+  }
+}
+
+uint8_t Lcd::GetCharacterPositionDifference(int value, int totalChars)
+{
+  int length = CalculateLength(value);
+
+  if(length < totalChars)
+  {
+    return totalChars - length;
+  }
+
+  return 0;
 }
 
 void Lcd::print(char* value)
@@ -78,36 +142,15 @@ void Lcd::print(int value)
   serialIO.print(value);
 }
 
-void Lcd::print(int value, int totalChars)
+void Lcd::printBigInt(int value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  int length = 1;
-  int tempValue = value;
+  MoveBigCursor(line, characterPosition + GetCharacterPositionDifference(value, totalChars));
+  serialIO.print(value);
+}
 
-  if(value < 0)
-  { 
-    length++;
-    tempValue *= -1;
-  }
-
-  while(tempValue > 9)
-  {
-    length++;
-    tempValue /= 10;
-  }
-
-  if(length < totalChars)
-  {
-    serialIO.write(StartCommand);
-    serialIO.write(ChangeXCoord);
-    serialIO.write((uint8_t)(totalChars - length) * (isBig ? 11 : 6));
-  }
-
-  //  while(length < totalChars)
-  //  {
-  //    serialIO.print(' ');
-  //    length++;
-  //  }
-
+void Lcd::printSmallInt(int value, uint8_t line, uint8_t characterPosition, int totalChars)
+{
+  MoveSmallCursor(line, characterPosition + GetCharacterPositionDifference(value, totalChars));
   serialIO.print(value);
 }
 
@@ -116,19 +159,18 @@ void Lcd::print(float value)
   serialIO.print(value);
 }
 
-void Lcd::print(double value)
+void Lcd::printBigFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
+  MoveBigCursor(line, characterPosition + GetCharacterPositionDifference((int)value, totalChars));
   serialIO.print(value);
 }
 
-void Lcd::print(long value)
+void Lcd::printSmallFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
+  MoveSmallCursor(line, characterPosition + GetCharacterPositionDifference((int)value, totalChars));
   serialIO.print(value);
 }
 
-void Lcd::print(boolean value)
-{
-  serialIO.print((int)value);
-}
+
 
 
