@@ -59,29 +59,24 @@ void Lcd::GoSmall()
   }
 }
 
-//const uint8_t BigFontWidth = 11;
-//const uint8_t BigFontHeight = 16;
-//const uint8_t SmallFontWidth = 6;
-//const uint8_t SmallFontHeight = 8;
-
 void Lcd::MoveBigCursor(uint8_t line, uint8_t charPos)
 {
   // Line, Y
   SendCommand(ChangeYCoord);
-  serialIO.write((uint8_t)0x00);
+  serialIO.write((line - 1) * BigFontHeight);
   // Character Position, X
   SendCommand(ChangeXCoord);
-  serialIO.write((uint8_t)0x00);
+  serialIO.write((charPos - 1) * BigFontWidth);
 }
 
 void Lcd::MoveSmallCursor(uint8_t line, uint8_t charPos)
 {
   // Line, Y
   SendCommand(ChangeYCoord);
-  serialIO.write((uint8_t)0x00);
+  serialIO.write((line - 1) * SmallFontHeight);
   // Character Position, X
   SendCommand(ChangeXCoord);
-  serialIO.write((uint8_t)0x00);
+  serialIO.write((charPos - 1) * SmallFontWidth);
 }
 
 void Lcd::ChangeFont()
@@ -112,6 +107,8 @@ int Lcd::CalculateLength(int value)
     length++;
     tempValue /= 10;
   }
+  
+  return length;
 }
 
 uint8_t Lcd::GetCharacterPositionDifference(int value, int totalChars)
@@ -144,13 +141,15 @@ void Lcd::print(int value)
 
 void Lcd::printBigInt(int value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  MoveBigCursor(line, characterPosition + GetCharacterPositionDifference(value, totalChars));
+  characterPosition += GetCharacterPositionDifference(value, totalChars);
+  MoveBigCursor(line, characterPosition);
   serialIO.print(value);
 }
 
 void Lcd::printSmallInt(int value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  MoveSmallCursor(line, characterPosition + GetCharacterPositionDifference(value, totalChars));
+  characterPosition += GetCharacterPositionDifference(value, totalChars);
+  MoveSmallCursor(line, characterPosition);
   serialIO.print(value);
 }
 
@@ -161,15 +160,18 @@ void Lcd::print(float value)
 
 void Lcd::printBigFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  MoveBigCursor(line, characterPosition + GetCharacterPositionDifference((int)value, totalChars));
+  characterPosition += GetCharacterPositionDifference(value, totalChars);
+  MoveBigCursor(line, characterPosition);
   serialIO.print(value);
 }
 
 void Lcd::printSmallFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars)
 {
-  MoveSmallCursor(line, characterPosition + GetCharacterPositionDifference((int)value, totalChars));
+  characterPosition += GetCharacterPositionDifference(value, totalChars);
+  MoveSmallCursor(line, characterPosition);
   serialIO.print(value);
 }
+
 
 
 

@@ -6,7 +6,7 @@
 #include "TestValues.h"
 
 
-const float VERSION = 0.5;
+const float VERSION = 0.6;
 
 // Pin Definitions
 const int speedSensorPin = 2;
@@ -14,10 +14,6 @@ const int speedSensorPin = 2;
 //const int brakeSwitchPin = 6;
 const int shiftLightPin = 8;
 const int videoStartPin = 9;
-const int xGPin = A0;
-const int yGPin = A1;
-const int zGPin = A2;
-//const int intakeTempPin = A3;
 
 // Interrupts
 const int rearSpeedSensorInterrupt = 0;
@@ -74,7 +70,7 @@ void setupBlueToothConnection()
   if (Serial.available() > 0)
     lcd->printLine("OK");  
   else
-    lcd->printLine(" X");
+    lcd->printLine("E1");
 }
 
 void mountSDCard()

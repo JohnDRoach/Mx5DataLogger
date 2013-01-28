@@ -15,15 +15,19 @@ public:
   void Init()
   {
     lcd->GoSmall();
-    lcd->printLine("  Diag Screen");
+    lcd->printLine("---- Diagnostics ---");
   }
 
   void RefreshValues()
   {
-    lcd->printLine("D");
+    static int test = 65500;
+    lcd->printSmallInt(test, 4, 5, 5);
+    test++;
   }
 };
 
 #endif
+
+
 
 

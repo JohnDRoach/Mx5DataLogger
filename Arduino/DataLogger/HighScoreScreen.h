@@ -1,7 +1,7 @@
 #ifndef HighScoreScreen_h
 #define HighScoreScreen_h
 
-//#include "Buttons.h"
+#include "Buttons.h"
 #include "ClearScoresScreen.h"
 #include "Screen.h"
 
@@ -20,12 +20,14 @@ public:
   void Init()
   {
     lcd->GoSmall();
-    lcd->printLine("  High Score");
+    lcd->printLine("- High Scores Board-");
   }
 
   void RefreshValues()
   {
-    lcd->printLine("H");
+    static int test = 0;
+    lcd->printSmallInt(test, 4, 5, 5);
+    test++;
   }
 
   Screen* NextScreen()
