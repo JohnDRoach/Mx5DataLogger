@@ -2,7 +2,9 @@
 #define CarData_h
 
 #include "Arduino.h"
+#include "Settings.h"
 
+const int shiftLightPin = 8;
 const int xGPin = A0;
 const int yGPin = A1;
 const int zGPin = A2;
@@ -30,6 +32,26 @@ private:
       return 4;
     else
       return 5;
+  }
+
+  static void LaunchShiftLight()
+  {
+    int launchRpmTolerance = 100; // Rpm - make this configurable in the near future
+
+    if(Stationary)
+    {
+      if((Settings::LaunchRpm - launchRpmTolerance < Rpm) && (Rpm < Settings::LaunchRpm + launchRpmTolerance))
+        digitalWrite(shiftLightPin, HIGH);
+      else
+        digitalWrite(shiftLightPin, LOW);
+    }
+    else
+    {
+      if(Rpm > Settings::ShiftRpm)
+        digitalWrite(shiftLightPin, HIGH);
+      else
+        digitalWrite(shiftLightPin, LOW);
+    }
   }
 
 public:
@@ -62,12 +84,16 @@ public:
     // Some multiplier what ever happens with the intake temp voltage
     tep = analogRead(intakeTempPin);
     IntakeTemp = tep;
-    
+
     Stationary = stationary;
+
+    LaunchShiftLight();
   }
 };
 
 #endif
+
+
 
 
 

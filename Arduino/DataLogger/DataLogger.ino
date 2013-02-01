@@ -8,6 +8,7 @@
 #include "CarData.h"
 #include "DiagData.h"
 #include "Settings.h"
+#include "SerialHandler.h"
 
 const float VERSION = 0.8;
 
@@ -15,7 +16,6 @@ const float VERSION = 0.8;
 const int speedSensorPin = 2;
 //const int rpmSensorPin = 3;
 //const int brakeSwitchPin = 6;
-const int shiftLightPin = 8;
 const int videoStartPin = 9;
 
 // Interrupts
@@ -160,13 +160,15 @@ void WriteToLCD()
 
 void loop()
 {
-  //  if (Serial.available() > 0) {
-  //    lcd->write(Serial.read());
-  //  }
+  if (Serial.available() > 0) {
+    Timer1.stop();
+    SerialHandler::DataAvailable(lcd);
+    startLcd();
+  }
 
   stationary = (rearSpeedCounter + rearSpeed) == 0;
   CarData::Update(rearSpeed, rpm, stationary);
-  // Send Bluetooth Data()
+  // Send Bluetooth Data() (This might end up optional)
   // Update HighScoreData()
   DiagData::Update(rearSpeedCounter, rpmCounter);
 }
