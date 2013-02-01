@@ -32,6 +32,7 @@ boolean stationary = true;
 
 Lcd* lcd = Lcd::Instance();
 ScreenHandler screenHandler;
+SerialHandler serialHandler(lcd);
 
 void setup() 
 {
@@ -162,7 +163,7 @@ void loop()
 {
   if (Serial.available() > 0) {
     Timer1.stop();
-    SerialHandler::DataAvailable(lcd);
+    serialHandler.DataAvailable();
     startLcd();
   }
 

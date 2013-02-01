@@ -5,6 +5,45 @@
 
 class Settings
 {
+private:
+  static boolean LoadValuesFromStream(Stream* stream)
+  {
+    char temp[6];
+
+    memset(temp, 0, 6);
+    stream->readBytesUntil('\n', temp, 6);
+    int launchRpm = atoi(temp);
+
+    memset(temp, 0, 6);
+    stream->readBytesUntil('\n', temp, 6);
+    int shiftRpm = atoi(temp);
+
+    if(launchRpm <= 0 || shiftRpm <= 0)
+    {
+      return false;
+    }
+    else
+    {
+      LaunchRpm = launchRpm;
+      ShiftRpm = shiftRpm;
+      return true;
+    }
+  }
+
+  static void Persist()
+  {
+    File settingsFile = SD.open("settings.txt", O_WRITE | O_CREAT | O_TRUNC);
+
+    if(!settingsFile)
+      return;
+
+    settingsFile.print(LaunchRpm);
+    settingsFile.write("\n");
+    settingsFile.print(ShiftRpm);
+    settingsFile.write("\n");
+    settingsFile.close();
+  }
+
 public:
   static int LaunchRpm;
   static int ShiftRpm;
@@ -17,41 +56,37 @@ public:
       return 1;
 
     if(settingsFile.available() < 0)
-      return 2;
-
-    char temp[6];
-
-    memset(temp, 0, 6);
-    settingsFile.readBytesUntil('\n', temp, 6);
-    int launchRpm = atoi(temp);
-
-    memset(temp, 0, 6);
-    settingsFile.readBytesUntil('\n', temp, 6);
-    int shiftRpm = atoi(temp);
-
-    settingsFile.close();
-
-    if(launchRpm == 0 || shiftRpm == 0)
     {
+      settingsFile.close();
+      return 2;
+    }
+
+    if(!LoadValuesFromStream(&settingsFile))
+    {
+      settingsFile.close();
       return 3;
     }
-    else
-    {
-      LaunchRpm = launchRpm;
-      ShiftRpm = shiftRpm;
-      return 0;
-    }
+
+    settingsFile.close();
+    return 0;
   }
 
-  static void StoreAndLoadNewValues(int launchRpm, int shiftRpm)
+  static void LoadNewValuesFromStreamAndPersist(Stream* stream)
   {
-    LaunchRpm = launchRpm;
-    ShiftRpm = shiftRpm;
-    // Save new values to disc
+    if(LoadValuesFromStream(stream))
+      Persist();
   }
 };
 
 #endif
+
+
+
+
+
+
+
+
 
 
 
