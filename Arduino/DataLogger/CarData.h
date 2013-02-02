@@ -37,11 +37,9 @@ private:
 
   static void LaunchShiftLight()
   {
-    int launchRpmTolerance = 100; // Rpm - make this configurable in the near future
-
     if(Stationary)
     {
-      if((Settings::LaunchRpm - launchRpmTolerance < Rpm) && (Rpm < Settings::LaunchRpm + launchRpmTolerance))
+      if((Settings::LaunchRpm - Settings::LaunchRpmTolerance < Rpm) && (Rpm < Settings::LaunchRpm + Settings::LaunchRpmTolerance))
         digitalWrite(shiftLightPin, HIGH);
       else
         digitalWrite(shiftLightPin, LOW);

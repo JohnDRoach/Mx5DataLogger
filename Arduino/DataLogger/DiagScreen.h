@@ -32,6 +32,9 @@ public:
     lcd->print("Launch RPM:");
 
     lcd->MoveSmallCursor(6, 1);
+    lcd->print(" Tolerance:");
+
+    lcd->MoveSmallCursor(7, 1);
     lcd->print(" Shift RPM:");
   }
 
@@ -52,17 +55,12 @@ public:
     else
       lcd->print("Moving");
 
-    lcd->printSmallInt(Settings::LaunchRpm, 5, 14, 4); // Launch RPM from settings
-    lcd->printSmallInt(Settings::ShiftRpm, 6, 14, 4); // Shift RPM from settings
+    lcd->printSmallInt(Settings::LaunchRpm, 5, 14, 4);
+    lcd->printSmallInt(Settings::LaunchRpmTolerance, 6, 14, 4);
+    lcd->printSmallInt(Settings::ShiftRpm, 7, 14, 4);
   }
 };
 
 #endif
-
-
-
-
-
-
 
 

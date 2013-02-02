@@ -16,15 +16,20 @@ private:
 
     memset(temp, 0, 6);
     stream->readBytesUntil('\n', temp, 6);
+    int launchRpmTolerance = atoi(temp);
+
+    memset(temp, 0, 6);
+    stream->readBytesUntil('\n', temp, 6);
     int shiftRpm = atoi(temp);
 
-    if(launchRpm <= 0 || shiftRpm <= 0)
+    if(launchRpm <= 0 || launchRpmTolerance <= 0 || shiftRpm <= 0)
     {
       return false;
     }
     else
     {
       LaunchRpm = launchRpm;
+      LaunchRpmTolerance = launchRpmTolerance;
       ShiftRpm = shiftRpm;
       return true;
     }
@@ -39,6 +44,8 @@ private:
 
     settingsFile.print(LaunchRpm);
     settingsFile.write("\n");
+    settingsFile.print(LaunchRpmTolerance);
+    settingsFile.write("\n");
     settingsFile.print(ShiftRpm);
     settingsFile.write("\n");
     settingsFile.close();
@@ -46,6 +53,7 @@ private:
 
 public:
   static int LaunchRpm;
+  static int LaunchRpmTolerance;
   static int ShiftRpm;
 
   static int Init()
@@ -79,6 +87,7 @@ public:
 };
 
 #endif
+
 
 
 

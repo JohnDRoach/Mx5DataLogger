@@ -197,12 +197,8 @@ void counterTimerFired()
   rearSpeed = rearSpeedCounter * 3.257; // this is per 500ms
   rearSpeedCounter = 0;
 
-  //rpm = rpmCounter * 60; // this is per second  
+  //rpm = rpmCounter * 60; // this is per second
   rpm = rpmCounter * 120; // this is per 500ms
   rpmCounter = 0;  
 }
-
-
-
-
 
