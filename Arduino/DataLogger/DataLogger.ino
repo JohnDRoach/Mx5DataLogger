@@ -14,8 +14,7 @@ const float VERSION = 0.8;
 
 // Pin Definitions
 const int speedSensorPin = 2;
-//const int rpmSensorPin = 3;
-//const int brakeSwitchPin = 6;
+const int rpmSensorPin = 3;
 const int videoStartPin = 9;
 
 // Interrupts

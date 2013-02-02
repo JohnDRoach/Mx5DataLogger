@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "Settings.h"
 
+const int brakeSwitchPin = 6;
 const int shiftLightPin = 8;
 const int xGPin = A0;
 const int yGPin = A1;
@@ -63,6 +64,7 @@ public:
   static float ZG;
   static float IntakeTemp;
   static boolean Stationary;
+  static boolean Braking;
 
   static void Update(unsigned int rearSpeed, unsigned int rpm, boolean stationary)
   {
@@ -73,19 +75,19 @@ public:
     // 0V = 0
     // 3.3V = 1023
     // 0G = 3.3/2 = 1023/2 ~ 512
-    float tep = 0.0;
-    tep = analogRead(xGPin);
-    XG = (tep - 512)/102.3;
-    tep = analogRead(yGPin);
-    YG = (tep - 512)/102.3;
-    tep = analogRead(zGPin);
-    ZG = (tep - 512)/102.3;
+    float temp = 0.0;
+    temp = analogRead(xGPin);
+    XG = (temp - 512)/102.3;
+    temp = analogRead(yGPin);
+    YG = (temp - 512)/102.3;
+    temp = analogRead(zGPin);
+    ZG = (temp - 512)/102.3;
 
-    // Some multiplier what ever happens with the intake temp voltage
-    tep = analogRead(intakeTempPin);
-    IntakeTemp = tep;
+    temp = analogRead(intakeTempPin);
+    IntakeTemp = temp * 0.3223 - 50;  // See spreadsheet
 
     Stationary = stationary;
+    Braking = digitalRead(brakeSwitchPin);
 
     LaunchShiftLight();
   }

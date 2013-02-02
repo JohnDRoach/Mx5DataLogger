@@ -13,6 +13,7 @@ float CarData::YG = 0.0;
 float CarData::ZG = 0.0;
 float CarData::IntakeTemp = 0.0;
 boolean CarData::Stationary = true;
+boolean CarData::Braking = true;
 
 #include "DiagData.h"
 int DiagData::RearSpeedCount = 0;
