@@ -2,6 +2,7 @@
 #define ClearScoresSuccessScreen_h
 
 #include "Screen.h"
+#include "HighScores.h"
 
 class ClearScoresSuccessScreen : 
 public Screen
@@ -14,10 +15,12 @@ public:
 
   void Init()
   {
+    HighScores::ClearScores();
+
     lcd->GoBig();
     lcd->NewLine();
     lcd->printLine("   Scores");
-    lcd->printLine("  Cleared!");
+    lcd->print("  Cleared!");
   }
 
   void RefreshValues()
@@ -26,5 +29,4 @@ public:
 };
 
 #endif
-
 

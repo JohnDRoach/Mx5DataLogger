@@ -4,12 +4,14 @@
 #include "Buttons.h"
 #include "ClearScoresScreen.h"
 #include "Screen.h"
+#include "HighScores.h"
 
 class HighScoreScreen : 
 public Screen
 {
 private:
   Screen* clearScoresScreen;
+  
 public:
   HighScoreScreen(Lcd* lcd) : 
   Screen(lcd)
@@ -21,13 +23,39 @@ public:
   {
     lcd->GoSmall();
     lcd->printLine("- High Scores Board-");
+    lcd->printLine("        Top    Live");
+    lcd->printLine("0-60");
+    lcd->printLine("0-100");
+    lcd->printLine("400m");
+    lcd->printLine("Speed");
+    lcd->printLine("NS G");
+    lcd->printLine("EW G");
   }
 
   void RefreshValues()
   {
-    static int test = 0;
-    lcd->printSmallInt(test, 4, 5, 5);
-    test++;
+    //    lcd->printLine("        Top    Live");
+    //    lcd->printLine("       123.12 123.12");
+    //    lcd->printLine("        123    123");
+    //    lcd->printLine("12345678901234567890");
+
+    lcd->printSmallFloat(HighScores::top60, 3, 8, 3);
+    lcd->printSmallFloat(HighScores::live60, 3, 15, 3);
+
+    lcd->printSmallFloat(HighScores::top100, 4, 8, 3);
+    lcd->printSmallFloat(HighScores::live100, 4, 15, 3);
+
+    lcd->printSmallFloat(HighScores::top400m, 5, 8, 3);
+    lcd->printSmallFloat(HighScores::live400m, 5, 15, 3);
+
+    lcd->printSmallInt(HighScores::topSpeed, 6, 10, 3);
+    lcd->printSmallInt(HighScores::liveSpeed, 6, 17, 3);
+
+    lcd->printSmallFloat(HighScores::topNSG, 7, 8, 3);
+    lcd->printSmallFloat(HighScores::liveNSG, 7, 15, 3);
+
+    lcd->printSmallFloat(HighScores::topEWG, 8, 8, 3);
+    lcd->printSmallFloat(HighScores::liveEWG, 8, 15, 3);
   }
 
   Screen* NextScreen()
@@ -42,4 +70,10 @@ public:
 };
 
 #endif
+
+
+
+
+
+
 

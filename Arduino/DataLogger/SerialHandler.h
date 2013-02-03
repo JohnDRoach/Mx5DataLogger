@@ -35,20 +35,20 @@ private:
 
     if(strcmp(command, "SET") == 0)
     {
-      Serial.write("ACK");
+      SendACK();
       while(Serial.available() <= 0);
       lcd->printLine("Applying Settings...");
       Settings::LoadNewValuesFromStreamAndPersist(&Serial);
     }
     else if(strcmp(command, "HSL") == 0)
     {
-      Serial.write("ACK");
+      SendACK();
       lcd->printLine("Sending High Scores.");
       HighScores::SendScoresVia(&Serial);
     }
     else if(strcmp(command, "LOG") ==0)
     {
-      Serial.write("ACK");
+      SendACK();
       Logger::EnterLoggingMode();
       lcd->printLine("On exit you will be");
       lcd->printLine("    in logging mode.");
@@ -57,6 +57,11 @@ private:
     {
       lcd->printLine("Invalid Command!");
     }
+  }
+  
+  void SendACK()
+  {
+    Serial.print(F("ACK"));
   }
 
 public:

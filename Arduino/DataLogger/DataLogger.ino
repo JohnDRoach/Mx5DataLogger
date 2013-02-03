@@ -6,12 +6,12 @@
 #include "Buttons.h"
 #include "ScreenHandler.h"
 #include "CarData.h"
-#include "DiagData.h"
 #include "Settings.h"
 #include "SerialHandler.h"
 #include "Logger.h"
+#include "HighScores.h"
 
-const float VERSION = 0.8;
+const float VERSION = 1.0;
 
 // Pin Definitions
 const int speedSensorPin = 2;
@@ -29,6 +29,7 @@ volatile unsigned int rpm = 0;
 volatile unsigned int rpmCounter = 0;
 
 boolean stationary = true;
+unsigned int lastDistanceTravelled = 0;
 
 Lcd* lcd = Lcd::Instance();
 ScreenHandler screenHandler;
@@ -42,6 +43,7 @@ void setup()
   pinMode(screenChangePin, INPUT);
   pinMode(shiftLightPin, OUTPUT);
   pinMode(videoStartPin, OUTPUT);
+  pinMode(10, OUTPUT);
 
   delay(3000);  // Wait for LCD and Bluetooth module to wake
 
@@ -69,8 +71,7 @@ void setupBlueToothConnection()
 {
   Serial.begin(115200);
   lcd->print("Bluetooth Init...");
-  delay(2000);  // Wait for device to be fully awake
-  Serial.print("\r\n+INQ=1\r\n");  // Tell BlueToothBee to advertise itself
+  Serial.print(F("\r\n+INQ=1\r\n"));  // Tell BlueToothBee to advertise itself
   delay(2000); // This delay is required.
 
   if (Serial.available() > 0)
@@ -83,37 +84,40 @@ void mountSDCard()
 {
   lcd->print("Mounting SDCard..");
 
-  int errorCode = SD.begin(10); // 10 is the chip select for this board
-
   // 0 = OK
   // S1 = Card Missing
   // S2 = No FAT16/FAT32 Partition
   // S3 = Already open or not initialised
-  if(errorCode)
-  {
-    lcd->print("S");
-    lcd->print(errorCode);
-    lcd->NewLine();
-  }
-  else
-  {
-    lcd->printLine("OK");      
-  }
+  writeStatus("S", SD.begin(10));
 }
 
 void loadSettings()
 {
   lcd->print("Load Settings....");
 
-  int errorCode = Settings::Init();
-
-  // 0 = OK
   // L1 = File not found
   // L2 = File is Empty
   // L3 = Invalid data
+  writeStatus("L", Settings::Init());
+  delay(1000); // time for SD card?
+}
+
+void loadHighScores()
+{
+  lcd->print("Loading Scores...");
+
+  // H1 = File not found
+  // H2 = File is Empty
+  // H3 = Invalid data
+  writeStatus("H", HighScores::Init());
+  delay(1000); // time for SD card?
+}
+
+void writeStatus(char* codePrefix, int errorCode)
+{
   if(errorCode)
   {
-    lcd->print("L");
+    lcd->print(codePrefix);
     lcd->print(errorCode);
     lcd->NewLine();
   }
@@ -121,12 +125,6 @@ void loadSettings()
   {
     lcd->printLine("OK");      
   }
-}
-
-void loadHighScores()
-{
-  lcd->print("Loading Scores...");
-  lcd->printLine("OK");
 }
 
 void startCounterTimer()
@@ -168,11 +166,9 @@ void loop()
     startLcd();
   }
 
-  stationary = (rearSpeedCounter + rearSpeed) == 0;
-  CarData::Update(rearSpeed, rpm, stationary);
-  // Send Bluetooth Data() (This might end up optional)
-  // Update HighScoreData()
-  DiagData::Update(rearSpeedCounter, rpmCounter);
+  UpdateCarData();
+  // Send Bluetooth Data() (If I wanted gauges on the phone then I'll need something like this)
+  HighScores::Update();
 }
 
 void LogIfNeedBe()
@@ -185,14 +181,16 @@ void LogIfNeedBe()
     lcd->printLine(" Bluetooth");
     lcd->printLine(" Logging");
 
-    CarData::Update(rearSpeed, rpm, stationary);
+    UpdateCarData();
     StartCamera();
     Logger::ResetCounter();
 
     while(!Buttons::ScreenChange())
     {
+      // Without high scores this logs greater than 300 Hz!!
       Logger::Log(&Serial);
-      CarData::Update(rearSpeed, rpm, stationary);
+      UpdateCarData();
+      HighScores::Update();  // Maybe remove this if it slows down the logging.
     }
 
     lcd->ClearDisplay();
@@ -203,6 +201,14 @@ void LogIfNeedBe()
     while(Buttons::ScreenChange());
     Logger::ExitLoggingMode();
   }
+}
+
+void UpdateCarData()
+{
+  stationary = (rearSpeedCounter + rearSpeed) == 0;
+  if(stationary)
+    lastDistanceTravelled = 0;
+  CarData::Update(rearSpeed, rpm, stationary, lastDistanceTravelled);
 }
 
 void StartCamera()
@@ -227,6 +233,8 @@ void counterTimerFired()
 {
   //Multipliers are based on period of MsTimer2
 
+  lastDistanceTravelled += 0.45 * rearSpeedCounter;
+
   //rearSpeed = speedCounter * 1.629; // this is per second
   rearSpeed = rearSpeedCounter * 3.257; // this is per 500ms
   rearSpeedCounter = 0;
@@ -235,6 +243,10 @@ void counterTimerFired()
   rpm = rpmCounter * 120; // this is per 500ms
   rpmCounter = 0;  
 }
+
+
+
+
 
 
 

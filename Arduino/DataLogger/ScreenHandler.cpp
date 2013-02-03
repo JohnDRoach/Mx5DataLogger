@@ -1,8 +1,7 @@
 #include "ScreenHandler.h"
 #include "MainScreen.h"
-#include "DiagScreen.h"
 #include "HighScoreScreen.h"
-
+#include "DiagScreen.h"
 
 ScreenHandler::ScreenHandler() :
 screenChangeLastState(false),

@@ -63,8 +63,9 @@ public:
   static float IntakeTemp;
   static boolean Stationary;
   static boolean Braking;
+  static int LastDistanceTravelled;
 
-  static void Update(unsigned int rearSpeed, unsigned int rpm, boolean stationary)
+  static void Update(unsigned int rearSpeed, unsigned int rpm, boolean stationary, unsigned int lastDistanceTravelled)
   {
     RearSpeed = rearSpeed;
     Rpm = rpm;
@@ -86,6 +87,7 @@ public:
 
     Stationary = stationary;
     Braking = digitalRead(brakeSwitchPin);
+    LastDistanceTravelled = lastDistanceTravelled;
 
     LaunchShiftLight();
   }

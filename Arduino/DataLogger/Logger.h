@@ -5,7 +5,6 @@
 #include "Lcd.h"
 #include "CarData.h"
 
-const char BeginLogging = 'B';
 
 class Logger
 {
@@ -36,27 +35,27 @@ public:
     unsigned long currentTime = millis();
     logTime = currentTime - startTime;
     stream->print(logTime);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(currentTime);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::RearSpeed);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::Rpm);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::Gear);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::XG);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::YG);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::ZG);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::IntakeTemp);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::Stationary);
-    stream->write(",");
+    stream->print(F(","));
     stream->print(CarData::Braking);
-    stream->write("\n");
+    stream->print(F("\n"));
     delay(500);
   }
 };

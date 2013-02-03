@@ -20,7 +20,7 @@ public:
   {
     nextScreen = next;
     successScreen = new ClearScoresSuccessScreen(lcd);
-    successScreen->SetNextScreen(next);
+    successScreen->SetNextScreen(nextScreen);
   }
 
   void Init()
@@ -32,12 +32,12 @@ public:
 
     if(Buttons::AlternateMode())
     {
-      lcd->printLine("     No");
+      lcd->print("     No");
       lastAlternateMode = true;
     }
     else
     {
-      lcd->printLine("     Yes");    
+      lcd->print("     Yes");
       lastAlternateMode = false;
     }
   }
