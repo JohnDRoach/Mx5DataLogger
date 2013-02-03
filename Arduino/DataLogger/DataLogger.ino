@@ -9,6 +9,7 @@
 #include "DiagData.h"
 #include "Settings.h"
 #include "SerialHandler.h"
+#include "Logger.h"
 
 const float VERSION = 0.8;
 
@@ -163,6 +164,7 @@ void loop()
   if (Serial.available() > 0) {
     Timer1.stop();
     serialHandler.DataAvailable();
+    LogIfNeedBe();
     startLcd();
   }
 
@@ -173,11 +175,43 @@ void loop()
   DiagData::Update(rearSpeedCounter, rpmCounter);
 }
 
+void LogIfNeedBe()
+{
+  if(Logger::Logging)
+  {
+    lcd->ClearDisplay();
+    lcd->GoBig();
+    lcd->MoveBigCursor(2, 1);
+    lcd->printLine(" Bluetooth");
+    lcd->printLine(" Logging");
 
-//volatile unsigned int rearSpeed = 0;
-//volatile unsigned int rearSpeedCounter = 0;
-//volatile unsigned int rpm = 0;
-//volatile unsigned int rpmCounter = 0;
+    CarData::Update(rearSpeed, rpm, stationary);
+    StartCamera();
+    Logger::ResetCounter();
+
+    while(!Buttons::ScreenChange())
+    {
+      Logger::Log(&Serial);
+      CarData::Update(rearSpeed, rpm, stationary);
+    }
+
+    lcd->ClearDisplay();
+    lcd->GoBig();
+    lcd->MoveBigCursor(2, 1);
+    lcd->printLine(" Logging");
+    lcd->printLine(" Finished");
+    while(Buttons::ScreenChange());
+    Logger::ExitLoggingMode();
+  }
+}
+
+void StartCamera()
+{
+  digitalWrite(videoStartPin, HIGH);
+  delay(2);
+  digitalWrite(videoStartPin, LOW);
+  delay(1); // Insert calibration delay here
+}
 
 void RearSpeedSensorInterrupt()
 {
@@ -201,4 +235,6 @@ void counterTimerFired()
   rpm = rpmCounter * 120; // this is per 500ms
   rpmCounter = 0;  
 }
+
+
 

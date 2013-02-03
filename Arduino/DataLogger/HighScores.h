@@ -19,6 +19,10 @@ public:
 
     highScoresFile.close();
   }
+  
+  static void Update()
+  {
+  }
 };
 
 #endif

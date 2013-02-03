@@ -6,6 +6,7 @@
 #include "Buttons.h"
 #include "Settings.h"
 #include "HighScores.h"
+#include "Logger.h"
 
 const byte SOH = 0x01;
 
@@ -41,8 +42,20 @@ private:
     }
     else if(strcmp(command, "HSL") == 0)
     {
+      Serial.write("ACK");
       lcd->printLine("Sending High Scores.");
       HighScores::SendScoresVia(&Serial);
+    }
+    else if(strcmp(command, "LOG") ==0)
+    {
+      Serial.write("ACK");
+      Logger::EnterLoggingMode();
+      lcd->printLine("On exit you will be");
+      lcd->printLine("    in logging mode.");
+    }
+    else
+    {
+      lcd->printLine("Invalid Command!");
     }
   }
 
@@ -55,10 +68,12 @@ public:
   void DataAvailable()
   {
     lcd->ClearDisplay();
+    lcd->GoSmall();
     lcd->printLine("Serial Data Received");
 
     FindAndProcessCommand();
 
+    lcd->GoSmall();
     lcd->printLine("Press button to exit");
     while(!Buttons::ScreenChange());
     while(Buttons::ScreenChange());
@@ -66,6 +81,7 @@ public:
 };
 
 #endif
+
 
 
 

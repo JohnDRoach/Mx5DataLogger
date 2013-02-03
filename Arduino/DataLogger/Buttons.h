@@ -18,20 +18,21 @@ private:
 public:
   static boolean ScreenChange()
   {
-    int pinState = digitalRead(screenChangePin);
-    long currentTime = millis();
-
-    if(pinState != lastButtonState) {
-      startedDebouncingAt = currentTime;
-    }
-
-    lastButtonState = pinState;
-
-    if((currentTime - startedDebouncingAt) > debounceTime) {
-      buttonState = pinState;
-    }
-
-    return buttonState == HIGH;
+    return digitalRead(screenChangePin);
+//    int pinState = digitalRead(screenChangePin);
+//    long currentTime = millis();
+//
+//    if(pinState != lastButtonState) {
+//      startedDebouncingAt = currentTime;
+//    }
+//
+//    lastButtonState = pinState;
+//
+//    if((currentTime - startedDebouncingAt) > debounceTime) {
+//      buttonState = pinState;
+//    }
+//
+//    return buttonState == HIGH;
   }
 
   static boolean AlternateMode()

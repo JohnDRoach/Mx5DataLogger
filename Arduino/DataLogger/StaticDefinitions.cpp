@@ -23,3 +23,9 @@ int DiagData::RpmCount = 0;
 int Settings::LaunchRpm = 5500;
 int Settings::LaunchRpmTolerance = 122;
 int Settings::ShiftRpm = 6800;
+
+#include "Logger.h"
+unsigned long Logger::logTime = 0;
+unsigned long Logger::startTime = 0;
+boolean Logger::Logging = false;
+
