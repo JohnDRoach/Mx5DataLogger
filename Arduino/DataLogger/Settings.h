@@ -49,7 +49,6 @@ private:
     settingsFile.print(ShiftRpm);
     settingsFile.write("\n");
     settingsFile.close();
-    delay(1000); // time for SD card?
   }
 
 public:

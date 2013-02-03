@@ -99,7 +99,6 @@ void loadSettings()
   // L2 = File is Empty
   // L3 = Invalid data
   writeStatus("L", Settings::Init());
-  delay(1000); // time for SD card?
 }
 
 void loadHighScores()
@@ -110,7 +109,6 @@ void loadHighScores()
   // H2 = File is Empty
   // H3 = Invalid data
   writeStatus("H", HighScores::Init());
-  delay(1000); // time for SD card?
 }
 
 void writeStatus(char* codePrefix, int errorCode)

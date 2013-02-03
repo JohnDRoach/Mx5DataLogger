@@ -29,7 +29,6 @@ private:
     highScoresFile.print(topEWG);
     highScoresFile.write("\n");    
     highScoresFile.close();
-    delay(1000); // time for SD card?
   }
 
 public:
@@ -124,7 +123,6 @@ public:
       stream->write(highScoresFile.read());
 
     highScoresFile.close();
-    delay(1000); // time for SD card?
   }
 
   static void ClearScores()
