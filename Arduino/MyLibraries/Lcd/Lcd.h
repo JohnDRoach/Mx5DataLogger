@@ -2,9 +2,11 @@
 #define Lcd_h
 
 #include "Arduino.h"
+#include <Print.h>
 #include <SendOnlySoftwareSerial.h>
 
-class Lcd
+
+class Lcd : public Print
 {
 private:
   static Lcd* instance;
@@ -40,6 +42,13 @@ public:
   void print(float);
   void printBigFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars);
   void printSmallFloat(float value, uint8_t line, uint8_t characterPosition, int totalChars);
+
+  size_t write(uint8_t);
+
+  void print(__FlashStringHelper*);
+  void printLine(__FlashStringHelper*);
+
+  using Print::write;
 };
 
 #endif

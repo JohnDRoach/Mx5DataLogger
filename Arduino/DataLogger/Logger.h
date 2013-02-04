@@ -56,7 +56,6 @@ public:
     stream->print(F(","));
     stream->print(CarData::Braking);
     stream->print(F("\n"));
-    delay(500);
   }
 };
 

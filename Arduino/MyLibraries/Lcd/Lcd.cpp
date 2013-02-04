@@ -205,13 +205,19 @@ void Lcd::printSmallFloat(float value, uint8_t line, uint8_t characterPosition, 
   serialIO.print(value);
 }
 
+size_t Lcd::write(uint8_t thing)
+{
+  return serialIO.write(thing);
+}
 
+void Lcd::print(__FlashStringHelper* fsh)
+{
+  serialIO.print(fsh);
+}
 
-
-
-
-
-
-
-
+void Lcd::printLine(__FlashStringHelper* fsh)
+{
+  serialIO.print(fsh);
+  NewLine();
+}
 

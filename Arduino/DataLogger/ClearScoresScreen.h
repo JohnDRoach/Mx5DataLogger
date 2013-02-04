@@ -26,18 +26,18 @@ public:
   void Init()
   {
     lcd->GoBig();
-    lcd->printLine("    Clear");
-    lcd->printLine("    High");
-    lcd->printLine("   Scores?");
+    lcd->printLine(F("    Clear"));
+    lcd->printLine(F("    High"));
+    lcd->printLine(F("   Scores?"));
 
     if(Buttons::AlternateMode())
     {
-      lcd->print("     No");
+      lcd->print(F("     No"));
       lastAlternateMode = true;
     }
     else
     {
-      lcd->print("     Yes");
+      lcd->print(F("     Yes"));
       lastAlternateMode = false;
     }
   }

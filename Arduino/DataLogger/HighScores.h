@@ -58,7 +58,7 @@ public:
       return 2;
     }
 
-    if(LoadValuesFromStream(&highScoresFile))
+    if(!LoadValuesFromStream(&highScoresFile))
     {
       highScoresFile.close();
       return 3;

@@ -30,32 +30,32 @@ private:
     Serial.readBytes(command, 3);
     command[3] = '\0';
 
-    lcd->print("Command: ");
+    lcd->print(F("Command: "));
     lcd->printLine(command);
 
     if(strcmp(command, "SET") == 0)
     {
       SendACK();
       while(Serial.available() <= 0);
-      lcd->printLine("Applying Settings...");
+      lcd->printLine(F("Applying Settings..."));
       Settings::LoadNewValuesFromStreamAndPersist(&Serial);
     }
     else if(strcmp(command, "HSL") == 0)
     {
       SendACK();
-      lcd->printLine("Sending High Scores.");
+      lcd->printLine(F("Sending High Scores."));
       HighScores::SendScoresVia(&Serial);
     }
     else if(strcmp(command, "LOG") ==0)
     {
       SendACK();
       Logger::EnterLoggingMode();
-      lcd->printLine("On exit you will be");
-      lcd->printLine("    in logging mode.");
+      lcd->printLine(F("On exit you will be"));
+      lcd->printLine(F("    in logging mode."));
     }
     else
     {
-      lcd->printLine("Invalid Command!");
+      lcd->printLine(F("Invalid Command!"));
     }
   }
   
@@ -74,14 +74,15 @@ public:
   {
     lcd->ClearDisplay();
     lcd->GoSmall();
-    lcd->printLine("Serial Data Received");
+    lcd->printLine(F("Serial Data Received"));
 
     FindAndProcessCommand();
 
     lcd->GoSmall();
-    lcd->printLine("Press button to exit");
+    lcd->printLine(F("Press button to exit"));
     while(!Buttons::ScreenChange());
     while(Buttons::ScreenChange());
+    delay(20);
   }
 };
 

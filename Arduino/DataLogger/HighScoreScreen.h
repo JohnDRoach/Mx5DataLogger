@@ -22,14 +22,14 @@ public:
   void Init()
   {
     lcd->GoSmall();
-    lcd->printLine("- High Scores Board-");
-    lcd->printLine("        Top    Live");
-    lcd->printLine("0-60");
-    lcd->printLine("0-100");
-    lcd->printLine("400m");
-    lcd->printLine("Speed");
-    lcd->printLine("NS G");
-    lcd->printLine("EW G");
+    lcd->printLine(F("- High Scores Board-"));
+    lcd->printLine(F("        Top    Live"));
+    lcd->printLine(F("0-60"));
+    lcd->printLine(F("0-100"));
+    lcd->printLine(F("400m"));
+    lcd->printLine(F("Speed"));
+    lcd->printLine(F("NS G"));
+    lcd->printLine(F("EW G"));
   }
 
   void RefreshValues()

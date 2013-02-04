@@ -62,27 +62,27 @@ void initialiseLCD()
 {
   lcd->ClearDisplay();
   lcd->GoSmall();
-  lcd->print("-- DataLogger ");
+  lcd->print(F("-- DataLogger "));
   lcd->print(VERSION);
-  lcd->print(" --");
+  lcd->print(F(" --"));
 }
 
 void setupBlueToothConnection()
 {
   Serial.begin(115200);
-  lcd->print("Bluetooth Init...");
+  lcd->print(F("Bluetooth Init..."));
   Serial.print(F("\r\n+INQ=1\r\n"));  // Tell BlueToothBee to advertise itself
   delay(2000); // This delay is required.
 
   if (Serial.available() > 0)
-    lcd->printLine("OK");  
+    lcd->printLine(F("OK"));  
   else
-    lcd->printLine("B1");  // Didn't receive a response
+    lcd->printLine(F("B1"));  // Didn't receive a response
 }
 
 void mountSDCard()
 {
-  lcd->print("Mounting SDCard..");
+  lcd->print(F("Mounting SDCard.."));
 
   // 0 = OK
   // S1 = Card Missing
@@ -93,7 +93,7 @@ void mountSDCard()
 
 void loadSettings()
 {
-  lcd->print("Load Settings....");
+  lcd->print(F("Load Settings...."));
 
   // L1 = File not found
   // L2 = File is Empty
@@ -103,7 +103,7 @@ void loadSettings()
 
 void loadHighScores()
 {
-  lcd->print("Loading Scores...");
+  lcd->print(F("Loading Scores..."));
 
   // H1 = File not found
   // H2 = File is Empty
@@ -121,23 +121,23 @@ void writeStatus(char* codePrefix, int errorCode)
   }
   else
   {
-    lcd->printLine("OK");      
+    lcd->printLine(F("OK"));      
   }
 }
 
 void startCounterTimer()
 {
-  lcd->print("Start Counters...");
+  lcd->print(F("Start Counters..."));
   MsTimer2::set(500, counterTimerFired); // 500ms period, 2Hz.
   // I would like this to be 20 - 50 Hz but need to look at sensible rates based on counter increment speed.
   MsTimer2::start();
-  lcd->printLine("OK");
+  lcd->printLine(F("OK"));
 }
 
 void holdIfAlternateMode()
 {
   if(Buttons::AlternateMode())
-    lcd->print("Unlock to continue.");
+    lcd->print(F("Unlock to continue."));
 
   while(Buttons::AlternateMode());
 }
@@ -176,27 +176,32 @@ void LogIfNeedBe()
     lcd->ClearDisplay();
     lcd->GoBig();
     lcd->MoveBigCursor(2, 1);
-    lcd->printLine(" Bluetooth");
-    lcd->printLine(" Logging");
+    lcd->printLine(F(" Bluetooth"));
+    lcd->printLine(F(" Logging"));
 
     UpdateCarData();
     StartCamera();
     Logger::ResetCounter();
 
+    unsigned long timeTracker = millis();
+    
     while(!Buttons::ScreenChange())
     {
-      // Without high scores this logs greater than 300 Hz!!
       Logger::Log(&Serial);
       UpdateCarData();
-      HighScores::Update();  // Maybe remove this if it slows down the logging.
+      HighScores::Update();
+      while(millis() - timeTracker < 20);  // want to log at 50Hz, i.e. every 20ms
+      timeTracker = millis();
     }
 
     lcd->ClearDisplay();
     lcd->GoBig();
     lcd->MoveBigCursor(2, 1);
-    lcd->printLine(" Logging");
-    lcd->printLine(" Finished");
+    lcd->printLine(F(" Logging"));
+    lcd->printLine(F(" Finished"));
     while(Buttons::ScreenChange());
+    while(!Buttons::ScreenChange());
+    delay(20);    
     Logger::ExitLoggingMode();
   }
 }

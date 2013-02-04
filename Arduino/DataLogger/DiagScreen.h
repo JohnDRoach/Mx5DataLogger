@@ -16,20 +16,20 @@ public:
   void Init()
   {
     lcd->GoSmall();
-    lcd->printLine("---- Diagnostics ---");
+    lcd->printLine(F("---- Diagnostics ---"));
     lcd->NewLine();
-    lcd->printLine("Launch RPM:");
-    lcd->printLine(" Tolerance:");
-    lcd->print(" Shift RPM:");
+    lcd->printLine(F("Launch RPM:"));
+    lcd->printLine(F(" Tolerance:"));
+    lcd->print(F(" Shift RPM:"));
   }
 
   void RefreshValues()
   {
     lcd->MoveSmallCursor(2, 5);
     if(CarData::Stationary)
-      lcd->print("Stationary");
+      lcd->print(F("Stationary"));
     else
-      lcd->print("Moving");
+      lcd->print(F("Moving"));
 
     lcd->printSmallInt(Settings::LaunchRpm, 3, 14, 4);
     lcd->printSmallInt(Settings::LaunchRpmTolerance, 4, 14, 4);

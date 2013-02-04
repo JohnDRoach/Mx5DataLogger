@@ -17,22 +17,22 @@ public:
   {
     lcd->GoBig();
     lcd->MoveBigCursor(1, 7);
-    lcd->print("KM/H");
+    lcd->print(F("KM/H"));
     lcd->MoveBigCursor(2, 7);
-    lcd->print("RPM");
+    lcd->print(F("RPM"));
     lcd->MoveBigCursor(3, 3);
-    lcd->print("GEAR");
+    lcd->print(F("GEAR"));
 
     lcd->GoSmall();
     lcd->MoveSmallCursor(7, 1);
-    lcd->print("x");
+    lcd->print(F("x"));
     lcd->MoveSmallCursor(7, 8);
-    lcd->print("y");
+    lcd->print(F("y"));
     lcd->MoveSmallCursor(7, 15);
-    lcd->print("z");
+    lcd->print(F("z"));
 
     lcd->MoveSmallCursor(8, 1);
-    lcd->print("Intake Temp:");
+    lcd->print(F("Intake Temp:"));
   }
 
   void RefreshValues()
