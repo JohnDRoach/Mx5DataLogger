@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="190dp"
+            android:text="JD's Data Logger"
+            android:id="@+id/Title"
+            android:layout_gravity="center"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Setup Bluetooth"
+            android:id="@+id/BluetoothButton"
+            android:onClick="bluetoothButtonClicked"
+            android:layout_weight="1"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Logging"
+            android:id="@+id/LoggingButton"
+            android:onClick="loggingButtonClicked"
+            android:layout_weight="1"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="High Scores"
+            android:id="@+id/HighScoresButton"
+            android:onClick="highScoresButtonClicked"
+            android:layout_weight="1"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:id="@+id/SettingsButton"
+            android:onClick="settingsButtonClicked"
+            android:layout_weight="1"/>
+</LinearLayout>
+

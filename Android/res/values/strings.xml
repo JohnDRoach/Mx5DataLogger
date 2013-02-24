@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JD Data Logger</string>
+    <string name="bluetooth_setup">Bluetooth Setup</string>
+    <string name="logging">Logging</string>
+    <string name="high_scores">High Scores</string>
+    <string name="settings">Settings</string>
+</resources>
