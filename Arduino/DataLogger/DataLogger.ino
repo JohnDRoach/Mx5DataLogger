@@ -130,7 +130,7 @@ void writeStatus(char* codePrefix, int errorCode)
 void startCounterTimer()
 {
   lcd->print(F("Start Counters..."));
-  MsTimer2::set(500, counterTimerFired); // 500ms period, 2Hz.
+  MsTimer2::set(250, counterTimerFired); // 250ms period, 4Hz.
   // I would like this to be 20 - 50 Hz but need to look at sensible rates based on counter increment speed.
   MsTimer2::start();
   lcd->printLine(F("OK"));
@@ -253,7 +253,7 @@ void counterTimerFired()
 
   rearSpeedHistory[2] = rearSpeedHistory[1];
   rearSpeedHistory[1] = rearSpeedHistory[0];
-  rearSpeedHistory[2] = rearSpeedCounter;
+  rearSpeedHistory[0] = rearSpeedCounter;
   rearSpeedCounter = 0;
 
   //rpm = rpmCounter * 60; // this is per second
@@ -262,7 +262,7 @@ void counterTimerFired()
 
   rpmHistory[2] = rpmHistory[1];
   rpmHistory[1] = rpmHistory[0];
-  rpmHistory[2] = rpmCounter;
+  rpmHistory[0] = rpmCounter;
   rpmCounter = 0;  
 }
 
