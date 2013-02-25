@@ -2,6 +2,7 @@
 #include "MainScreen.h"
 #include "HighScoreScreen.h"
 #include "DiagScreen.h"
+#include "CarData.h"
 
 ScreenHandler::ScreenHandler() :
 screenChangeLastState(false),
@@ -36,12 +37,21 @@ void ScreenHandler::ChangeScreen(boolean state)
 
 void ScreenHandler::ChangeScreen()
 {
-  currentScreen = currentScreen->NextScreen();
-  Start();
+  if(CarData::Braking)
+  {
+    lcd->ToggleBacklight();
+  }
+  else
+  {
+    currentScreen = currentScreen->NextScreen();
+    Start();
+  }
 }
 
 void ScreenHandler::RefreshValues()
 {
   currentScreen->RefreshValues();
 }
+
+
 

@@ -6,7 +6,6 @@ int CarData::Gear = 0;
 float CarData::XG = 0.0;
 float CarData::YG = 0.0;
 float CarData::ZG = 0.0;
-float CarData::IntakeTemp = 0.0;
 boolean CarData::Stationary = true;
 boolean CarData::Braking = true;
 int CarData::LastDistanceTravelled = 0;

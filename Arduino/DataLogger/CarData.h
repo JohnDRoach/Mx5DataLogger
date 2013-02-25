@@ -9,7 +9,7 @@ const int shiftLightPin = 8;
 const int xGPin = A0;
 const int yGPin = A1;
 const int zGPin = A2;
-const int intakeTempPin = A3;
+//const int intakeTempPin = A3;  // This will become the 2-step output
 
 class CarData
 {
@@ -60,7 +60,6 @@ public:
   static float XG;
   static float YG;
   static float ZG;
-  static float IntakeTemp;
   static boolean Stationary;
   static boolean Braking;
   static int LastDistanceTravelled;
@@ -81,9 +80,6 @@ public:
     YG = (temp - 512)/102.3;
     temp = analogRead(zGPin);
     ZG = (temp - 512)/102.3;
-
-    temp = analogRead(intakeTempPin);
-    IntakeTemp = temp * 0.3223 - 50;  // See spreadsheet
 
     Stationary = stationary;
     Braking = digitalRead(brakeSwitchPin);

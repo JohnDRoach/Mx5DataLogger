@@ -15,13 +15,15 @@ class SerialHandler
 private:
   Lcd* lcd;
 
-  void FindAndProcessCommand()
+  boolean FindStartCharacter()
   {
     while(Serial.available() > 0)
     {
       if(Serial.read() == SOH)
-        HandleCommandString();
+        return true;
     }
+
+    return false;
   }
 
   void HandleCommandString()
@@ -58,7 +60,7 @@ private:
       lcd->printLine(F("Invalid Command!"));
     }
   }
-  
+
   void SendACK()
   {
     Serial.print(F("ACK"));
@@ -72,11 +74,13 @@ public:
 
   void DataAvailable()
   {
+    if(!FindStartCharacter())
+      return;
+
     lcd->ClearDisplay();
     lcd->GoSmall();
     lcd->printLine(F("Serial Data Received"));
-
-    FindAndProcessCommand();
+    HandleCommandString();
 
     lcd->GoSmall();
     lcd->printLine(F("Press button to exit"));
@@ -87,6 +91,9 @@ public:
 };
 
 #endif
+
+
+
 
 
 

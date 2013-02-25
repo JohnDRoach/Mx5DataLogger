@@ -50,8 +50,6 @@ public:
     stream->print(F(","));
     stream->print(CarData::ZG);
     stream->print(F(","));
-    stream->print(CarData::IntakeTemp);
-    stream->print(F(","));
     stream->print(CarData::Stationary);
     stream->print(F(","));
     stream->print(CarData::Braking);
