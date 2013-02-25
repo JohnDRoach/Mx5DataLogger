@@ -25,8 +25,10 @@ const int rpmSensorInterrupt = 1;
 // Volatile Interrupt/Timer variables
 volatile unsigned int rearSpeed = 0;
 volatile unsigned int rearSpeedCounter = 0;
+volatile unsigned int rearSpeedHistory[3];
 volatile unsigned int rpm = 0;
 volatile unsigned int rpmCounter = 0;
+volatile unsigned int rpmHistory[3];
 
 boolean stationary = true;
 unsigned int lastDistanceTravelled = 0;
@@ -184,7 +186,7 @@ void LogIfNeedBe()
     Logger::ResetCounter();
 
     unsigned long timeTracker = millis();
-    
+
     while(!Buttons::ScreenChange())
     {
       Logger::Log(&Serial);
@@ -239,17 +241,28 @@ void counterTimerFired()
   lastDistanceTravelled += 0.45 * rearSpeedCounter;
 
   //rearSpeed = speedCounter * 1.629; // this is per second
-  rearSpeed = rearSpeedCounter * 3.257; // this is per 500ms
+  //rearSpeed = rearSpeedCounter * 3.257; // this is per 500ms
+  if(rearSpeedCounter == 0 && rearSpeedHistory[0] == 0)
+  {
+    rearSpeed = 0;
+  }
+  else
+  {
+    rearSpeed = (rearSpeedHistory[2] + rearSpeedHistory[1] + rearSpeedHistory[0] + rearSpeedCounter) * 1.629;
+  }
+
+  rearSpeedHistory[2] = rearSpeedHistory[1];
+  rearSpeedHistory[1] = rearSpeedHistory[0];
+  rearSpeedHistory[2] = rearSpeedCounter;
   rearSpeedCounter = 0;
 
   //rpm = rpmCounter * 60; // this is per second
-  rpm = rpmCounter * 120; // this is per 500ms
+  //rpm = rpmCounter * 120; // this is per 500ms
+  rpm = (rpmHistory[2] + rpmHistory[1] + rpmHistory[0] + rpmCounter) * 1.629;
+
+  rpmHistory[2] = rpmHistory[1];
+  rpmHistory[1] = rpmHistory[0];
+  rpmHistory[2] = rpmCounter;
   rpmCounter = 0;  
 }
-
-
-
-
-
-
 
