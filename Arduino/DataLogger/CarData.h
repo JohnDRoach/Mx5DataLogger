@@ -75,11 +75,11 @@ public:
     // 0G = 3.3/2 = 1023/2 ~ 512
     float temp = 0.0;
     temp = analogRead(xGPin);
-    XG = (temp - 512)/102.3;
+    XG = temp * 0.0133 - 4.92;
     temp = analogRead(yGPin);
-    YG = (temp - 512)/102.3;
+    YG = temp * 0.0139 - 5.18;
     temp = analogRead(zGPin);
-    ZG = (temp - 512)/102.3;
+    ZG = temp * 0.0125 - 4.75;
 
     Stationary = stationary;
     Braking = digitalRead(brakeSwitchPin);
